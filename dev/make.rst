@@ -73,7 +73,7 @@ is properly rebuilt when relevant files are edited.
 Also, special make substituions are used:
 * ``$@`` = the name of the rule's target (e.g. the ``config.h`` rule)
 * ``$^`` = all dependencies of the rule
-* ``$(VAR:a=b) = substitute trailing ``a`` with ``b`` in each word.
+* ``$(VAR:a=b)`` = substitute trailing ``a`` with ``b`` in each word.
 
 General Rules
 -------------

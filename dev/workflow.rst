@@ -3,7 +3,15 @@ Setting Up Your Project Environment
 
 Let's say you're just getting started on project id CHM101.
 A standard workflow on Summit is to build and install project
-sources to `/ccs/proj/CHM101`.
+sources to ``/ccs/proj/CHM101``, stage input/output files to
+``/gpfs/alpine/proj-shared/CHM101``,
+and use ``/gpfs/alpine/scratch/$USER/CHM101``
+during a run.
+
+You should also strongly consider
+having each MPI rank do all file-per-process I/O
+to ``/mnt/bb/$USER``, as described in
+`Using the NVME <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#current-nvme-usage>_`.
 
 Installing Software
 ===================
@@ -144,9 +152,10 @@ TODO
    
 Complete this example with:
 
- * an lsf script
+ * an lsf script, explain what the launch node is
 
- * I/O paths (write to /gpfs), expected IO throughput ~ 10 Mb/s in file-per-process mode
+ * I/O paths (write to /gpfs), expected IO throughput
+   ~ 10 Mb/s in file-per-process mode, expect latency
 
  * saving software version and parameters in output
 

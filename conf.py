@@ -50,6 +50,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 #html_theme = 'alabaster' # needs vertical line dividing left nav
 #html_theme = 'agogo'
 #html_theme = 'haiku'
+html_theme = 'sphinx_rtd_theme'
 #html_theme_options = {
 #            "rightsidebar": "true",
 #            "relbarbgcolor": "black"
