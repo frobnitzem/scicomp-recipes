@@ -10,3 +10,4 @@ Development Tools
    make
    cmake
    spack
+   git_submodules
