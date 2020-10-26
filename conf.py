@@ -30,8 +30,8 @@ release = '0.1'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-]
+# include the theme in the list of extensions to be loaded
+extensions = [] #'sphinx_typo3_theme']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -48,9 +48,12 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # a list of builtin themes.
 #
 #html_theme = 'alabaster' # needs vertical line dividing left nav
-#html_theme = 'agogo'
+html_theme = 'agogo'
 #html_theme = 'haiku'
-html_theme = 'sphinx_rtd_theme'
+#html_theme = 'sphinx_rtd_theme'
+#html_theme = 'sphinx_typo3_theme'
+#html_theme = 'pyramid'
+
 #html_theme_options = {
 #            "rightsidebar": "true",
 #            "relbarbgcolor": "black"

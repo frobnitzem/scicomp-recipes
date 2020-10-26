@@ -8,12 +8,12 @@ Here's a collection of parallel programming models
 that help to manage the trade-off between fine-grained
 control and high-level structured code.
 
-We provide some minimal working examples and build
-scripts for each so you can easily adapt them
-into your code.
+These are minimal working examples and build
+scripts that should be easy to adapt into your code.
 
 .. toctree::
 
+   multi_impl
    cuda
    kokkos
    openmp
