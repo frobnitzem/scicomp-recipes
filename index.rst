@@ -22,18 +22,20 @@ examples that can serve as building blocks for growing
 and improving applications here at OLCF.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :numbered:
 
    dev/index
    models/index
-   linalg/index
-   taskpar/index
-   transpose/index
-   halo/index
-   treecodes/index
+   comms/index
+   perf/index
 
    references
+
+.. some categories we don't yet have!
+   linalg/index
+   taskpar/index
+   halo/index
 
 .. toctree::
    :hidden:
@@ -42,5 +44,5 @@ and improving applications here at OLCF.
 
 .. note::
 
-   Have an idea to improve this cookbook? See :doc:`contributing/index`.
+   Have a great recipe you want to share? See :doc:`contributing/index`.
 

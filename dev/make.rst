@@ -13,12 +13,12 @@ by the user.
 Not second-guessing, autodetecting or otherwise overriding
 the user's environment is make's speciality.
 
-There are many `good guides online <https://nullprogram.com/blog/2017/08/20/>_`.
+There are many `good guides online <https://nullprogram.com/blog/2017/08/20/>`_.
 
 Syntax Example
 --------------
 
-Here's an example of good practices from the `quark project <https://tools.suckless.org/quark/>_`:
+Here's an example of good practices from the `quark project <https://tools.suckless.org/quark/>`_:
 
 .. code-block:: make
 
@@ -126,7 +126,7 @@ to let the user point the build at all system dependencies:
     # compiler and linker
     CC = cc
 
-GNU Make defines the `shell function <https://www.gnu.org/software/make/manual/html_node/Shell-Function.html#Shell-Function>_`.
+GNU Make defines the `shell function <https://www.gnu.org/software/make/manual/html_node/Shell-Function.html#Shell-Function>`_.
 This can be helpful for adding limited auto-detection to ``config.mk``.
 For example, ``$(shell pkg-config --libs zlib)``.
 
@@ -134,7 +134,7 @@ Interesting Tricks
 ------------------
 
 GCC can create Makefiles listing user header files with ``-MMD``.
-The way to use this is `like this <https://stackoverflow.com/questions/11855386/using-g-with-mmd-in-makefile-to-automatically-generate-dependencies>_`:
+The way to use this is `like this <https://stackoverflow.com/questions/11855386/using-g-with-mmd-in-makefile-to-automatically-generate-dependencies>`_:
 
 .. code-block:: make
 

@@ -5,7 +5,7 @@ Submitting suggestions
 ====================================
 
 Have a suggestion for improvement? Share it by
-`opening an issue <https://code.ornl.gov/99R/olcf-cookbook/issues/new>_`
+`opening an issue <https://code.ornl.gov/99R/olcf-cookbook/issues/new>`_
 
 
 Authoring content

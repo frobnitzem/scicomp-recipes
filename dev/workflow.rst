@@ -11,7 +11,7 @@ during a run.
 You should also strongly consider
 having each MPI rank do all file-per-process I/O
 to ``/mnt/bb/$USER``, as described in
-`Using the NVME <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#current-nvme-usage>_`.
+`Using the NVME <https://docs.olcf.ornl.gov/systems/summit_user_guide.html#current-nvme-usage>`_.
 
 Installing Software
 ===================

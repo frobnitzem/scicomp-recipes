@@ -1,13 +1,6 @@
 Compiling Using Spack
 #####################
 
-.. epigraph::
-
-  Give me six hours to chop down a tree and I will spend
-  the first four sharpening the axe.
-
-  -- Abraham Lincoln
-
 High-performance computing systems are large and complex,
 with many moving parts.  Being a productive developer
 requires having a stable, working set of development tools,
@@ -69,7 +62,7 @@ trilinos, etc.
 
 .. code-block:: bash
 
-  $ git clone https://github.com/spack/spack.git
+  $ git clone --depth 1 https://github.com/spack/spack.git
   $ source spack/share/spack/setup-env.sh 
   $ spack install kokkos+aggressive_vectorization+cuda+enable_lambda+openmp~serial cxxstd=c++11 host_arch=HSW gpu_arch=Volta70
 

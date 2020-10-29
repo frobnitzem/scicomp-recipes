@@ -3,7 +3,7 @@ CUDA Programming Model
 
 There's a lot of useful discussion of optimizing code
 for HPC at
-`The CUDA Programming Guide <https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html>_`.
+`The CUDA Programming Guide <https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html>`_.
 
 Warp Speed Programming
 ----------------------
@@ -21,7 +21,7 @@ that can speed up your CUDA codes.  One of the most important is
 ``fma(x,y,z)``, which executes ``x*y+z`` with the same speed
 as a single multiplication.
 
-Other intrinsics are listed `here <https://docs.nvidia.com/cuda/archive/11.0/cuda-c-programming-guide/index.html#standard-functions>_`.
+Other intrinsics are listed `here <https://docs.nvidia.com/cuda/archive/11.0/cuda-c-programming-guide/index.html#standard-functions>`_.
 
 
 Inter-Warp Communication
@@ -29,7 +29,7 @@ Inter-Warp Communication
 
 Threads within a warp can operate in a tightly coupled way
 by exchanging data using
-`warp-level primitives <https://developer.nvidia.com/blog/using-cuda-warp-level-primitives>_`.
+`warp-level primitives <https://developer.nvidia.com/blog/using-cuda-warp-level-primitives>`_.
 
 This is not just useful for loops, but can be used
 to manually implement reduction or even to coordinate
@@ -40,7 +40,7 @@ For Loop Example
 ----------------
 
 Here's a minimal example to run ``Y += A*X`` using a CUDA kernel.
-It shows the `grid-stride-for-loop pattern <https://developer.nvidia.com/blog/cuda-pro-tip-write-flexible-kernels-grid-stride-loops>_`::
+It shows the `grid-stride-for-loop pattern <https://developer.nvidia.com/blog/cuda-pro-tip-write-flexible-kernels-grid-stride-loops>`_::
 
     __global__ void saxpy(size_t n, float a, float *x, float *y) {
         for (int i = blockIdx.x * blockDim.x + threadIdx.x;

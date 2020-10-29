@@ -173,7 +173,8 @@ The ``vector.hh`` header file has all the interesting parts::
     Vector *mkHostVec();
     Vector *mkCUDAVec();
 
-.. note::
 
-    Contributed by David M. Rogers
+.. admonition:: Contributed by
+
+   David M. Rogers
 
