@@ -232,6 +232,9 @@ You can run some quick tests on this using interactive mode,
     # run 6 ranks per node
     jsrun --smpiargs=-gpu -r 6 -g 1 -c 7 -b packed:7 -EOMP_NUM_THREADS=7 ./allreduce
 
+The performance plots below were gathered following the recipe
+for :doc:`/perf/strong_scaling`.
+
 .. admonition:: Contributed by
 
    David M. Rogers

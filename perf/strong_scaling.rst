@@ -16,15 +16,26 @@ Making a Strong-Scaling Plot
     #BSUB -P chm101
     #BSUB -W 0:10
     #BSUB -alloc_flags NVME
-    #BSUB -nnodes 10
+    #BSUB -nnodes 16
     #BSUB -J scaling
     #BSUB -o scaling.%J
 
     . /ccs/proj/chm101/setup-env.sh
 
     EXE=$PWD/the_code
+    COPY=$PWD/the_copy_script
 
-    echo "Starting strong scaling calculation of $EXE v. 0.2.0"
+    echo "Starting strong scaling calculation of $EXE"
+    ver=`git rev-parse HEAD`
+    if [ $? -eq 0 ]; then
+      echo "Git commit hash = $ver"
+      echo "Plus Diffs"
+      echo "--------------------------------------------------------"
+      git diff $ver | cat
+      echo "--------------------------------------------------------"
+      echo
+    fi
+
     let nodes=(LSB_MAX_NUM_PROCESSORS-1)/42
     let min_nodes=nodes/16
 
@@ -34,9 +45,9 @@ Making a Strong-Scaling Plot
 
     while [ $nodes -ge $min_nodes ]; do
        echo "Starting copy on $nodes nodes at `date`"
-       jsrun -n $(())
+       jsrun -n $nodes -c7 -b packed:7 $COPY
        echo "Starting run on $nodes nodes at `date`"
-       jsrun -n $((6*$nodes)) -g 1 -c 7 -b packed:7 $EXE
+       jsrun -n $((6*$nodes)) -g1 -c7 -b packed:7 $EXE
        let nodes=nodes/2
     done
 
@@ -53,22 +64,52 @@ There are some really useful coventions demonstrated here:
    the job crash.
 
  * We can calculate number of nodes from the number of processors
-   (Summit has 42 per node)
+   (Summit has 42 cores per node)
 
  * One GPU per MPI rank and 7 CPUs is a good starting point
-   for optimization.
+   for optimization.  Always use ``-b`` to bind ranks
+   to cores.
+
+ * Printing out the name and full version of the source used is
+   really helpful for doing retrospectives later.
+
+   This code assumes you're using git.  Hopefully that's the
+   case.  If your job-scripts live in a different area, you
+   could version them too.  None of this is a substitute
+   for your executable printing its own version and timing info.
 
  * Printing as much timing output as possible allows you more
    chances to recover in case the run fails unexpectedly.
-
- * Printing out the name and version of the executable is
-   really helpful for doing retrospectives later.
 
  * Start scaling runs with small nnodes and check sizes, etc.
    Within a run, you should start at the highest node count
    since it should complete faster.
 
-Staging input files to the NVME is good practice.  For details,
-see the `user guide <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=smpi%20args#current-nvme-usage>`_.
+  * Staging input files to the NVME is good practice.
+    
+    For details,
+    see the `user guide <https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=smpi%20args#current-nvme-usage>`_.
 
+The copy script mentioned would do well to use
+the MPI rank, user-name, and jobid variables
+to copy outputs to /mnt/bb like so:
+
+.. code-block:: bash
+
+    #!/bin/bash
+    # the_copy_script
+
+    set -e
+    dir=/mnt/bb/$USER/$OMPI_COMM_WORLD_RANK
+    [ -d $dir ] && rm -fr $dir
+    mkdir -p $dir
+    echo "creating output dir $dir for job $LSB_JOBID"
+    cp /ccs/proj/chm101/inp.$OMPI_COMM_WORLD_RANK.dat $dir/
+
+This allows each rank to access a collision-free
+space from the others.
+
+.. admonition:: Contributed by
+
+   David M. Rogers
 
