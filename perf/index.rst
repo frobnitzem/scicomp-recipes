@@ -5,5 +5,6 @@ Performance Measurement
 
 .. toctree::
 
-   strong_scaling
+   user_timing
+   scaling
 

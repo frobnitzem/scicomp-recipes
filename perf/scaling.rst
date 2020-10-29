@@ -1,5 +1,5 @@
-Making a Strong-Scaling Plot
-############################
+Making a Scaling Plot
+#####################
 
 .. warning::
 
@@ -25,7 +25,7 @@ Making a Strong-Scaling Plot
     EXE=$PWD/the_code
     COPY=$PWD/the_copy_script
 
-    echo "Starting strong scaling calculation of $EXE"
+    echo "Starting scaling calculation of $EXE"
     ver=`git rev-parse HEAD`
     if [ $? -eq 0 ]; then
       echo "Git commit hash = $ver"

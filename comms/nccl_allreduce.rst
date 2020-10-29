@@ -233,7 +233,7 @@ You can run some quick tests on this using interactive mode,
     jsrun --smpiargs=-gpu -r 6 -g 1 -c 7 -b packed:7 -EOMP_NUM_THREADS=7 ./allreduce
 
 The performance plots below were gathered following the recipe
-for :doc:`/perf/strong_scaling`.
+for :doc:`/perf/scaling`.
 
 .. admonition:: Contributed by
 
