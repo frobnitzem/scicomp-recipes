@@ -115,6 +115,122 @@ I get the following timings using gcc 6.4.0 and CUDA 10.1.243 on 1 Summit node.
 
 Note that this includes generating 8 random matrices and doing 4 matrix-multiplies.
 
+The following 2 cmake files make compilation easy.
+
+.. code-block:: cmake
+
+    # CMakeLists.txt
+    SET(TARGET "gemm")
+
+    SET(TARGET_SRC
+	gemm.cc
+       )
+
+    CMAKE_MINIMUM_REQUIRED(VERSION 3.17)
+
+    PROJECT(${TARGET} CXX CUDA)
+
+    # Dependency Packages
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+    find_package(MPI REQUIRED)
+    find_package(SLATE REQUIRED)
+    find_package(CUDAToolkit REQUIRED) # TODO: create SLATE::CUDA
+    find_package(OpenMP REQUIRED) # TODO: add to SLATE
+
+    add_executable(${TARGET} ${TARGET_SRC})
+    set_target_properties(
+	${TARGET} PROPERTIES
+	CXX_STANDARD 17
+	CUDA_STANDARD 11
+	CXX_STANDARD_REQUIRED true
+	CXX_EXTENSIONS false
+    )
+
+    # TODO: ideally a target like SLATE::CUDA would add the cublas dep.
+    #target_link_libraries(${TARGET} PRIVATE SLATE::CUDA MPI::MPI_CXX)
+    target_link_libraries(${TARGET} PRIVATE SLATE CUDA::cublas CUDA::cudart OpenMP::OpenMP_CXX MPI::MPI_CXX)
+    set_property(TARGET ${TARGET} PROPERTY CUDA_ARCHITECTURES 70)
+
+    install (TARGETS ${TARGET} DESTINATION bin)
+
+.. code-block:: cmake
+
+    # cmake/FindSLATE.cmake
+    # Find the slate library
+    # THIS IS A WORK IN PROGRESS - SINCE IT DOESN't SET CUDA/OpenMP DEPENDENCIES CORRECTLY
+    #
+    # The following variables are optionally searched for defaults
+    #  SLATE_ROOT: Base directory where all SLATE components are found
+    #  SLATE_INCLUDE_DIR: Directory where SLATE header is found
+    #  SLATE_LIB_DIR: Directory where SLATE library is found
+    #
+    # The following are set after configuration is done:
+    #  SLATE_FOUND
+    #  SLATE_INCLUDE_DIRS
+    #  SLATE_LIBRARIES
+
+    set(SLATE_INCLUDE_DIR $ENV{SLATE_INCLUDE_DIR} CACHE PATH "Folder contains SLATE headers")
+    set(SLATE_LIB_DIR $ENV{SLATE_LIB_DIR} CACHE PATH "Folder contains SLATE libraries")
+    set(SLATE_VERSION $ENV{SLATE_VERSION} CACHE STRING "Version of SLATE to build with")
+
+    # Compatible layer for CMake <3.12. SLATE_ROOT will be accounted in for searching paths and libraries for CMake >=3.12.
+    list(APPEND CMAKE_PREFIX_PATH ${SLATE_ROOT})
+
+    find_path(SLATE_INCLUDE_DIRS
+      NAMES slate/slate.hh
+      HINTS ${SLATE_INCLUDE_DIR})
+
+    if (USE_STATIC_SLATE)
+      MESSAGE(STATUS "USE_STATIC_SLATE is set. Linking with static SLATE library.")
+      if (SLATE_VERSION)  # Prefer the versioned library if a specific SLATE version is specified
+	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a.${SLATE_VERSION}" ${CMAKE_FIND_LIBRARY_SUFFIXES})
+      endif()
+    else()
+      if (SLATE_VERSION)  # Prefer the versioned library if a specific SLATE version is specified
+	set(CMAKE_FIND_LIBRARY_SUFFIXES ".so.${SLATE_VERSION}" ${CMAKE_FIND_LIBRARY_SUFFIXES})
+      endif()
+    endif()
+
+    find_library(SLATE_LIBRARIES
+      NAMES "slate"
+      HINTS ${SLATE_LIB_DIR})
+
+    include(FindPackageHandleStandardArgs)
+    find_package_handle_standard_args(SLATE DEFAULT_MSG SLATE_INCLUDE_DIRS SLATE_LIBRARIES)
+
+    if(SLATE_FOUND)
+      set (SLATE_HEADER_FILE "${SLATE_INCLUDE_DIRS}/slate/slate.hh")
+      message (STATUS "Determining SLATE version from the header file: ${SLATE_HEADER_FILE}")
+      # e.g. #define SLATE_VERSION 20201000
+      file (STRINGS ${SLATE_HEADER_FILE} SLATE_VERSION_DEFINED
+	  REGEX "^[ \t]*#define[ \t]+SLATE_VERSION[ \t]+[0-9]+.*$" LIMIT_COUNT 1)
+      if (SLATE_VERSION_DEFINED)
+	string (REGEX REPLACE "^[ \t]*#define[ \t]+SLATE_VERSION[ \t]+" ""
+		SLATE_VERSION ${SLATE_VERSION_DEFINED})
+	message (STATUS "SLATE_VERSION: ${SLATE_VERSION}")
+      endif ()
+      message(STATUS "Found SLATE (include: ${SLATE_INCLUDE_DIRS}, library: ${SLATE_LIBRARIES})")
+      # Create a new-style imported target (SLATE)
+      if (USE_STATIC_SLATE)
+	  add_library(SLATE STATIC IMPORTED)
+      else()
+	  add_library(SLATE SHARED IMPORTED)
+      endif ()
+      target_include_directories(SLATE INTERFACE ${SLATE_INCLUDE_DIRS})
+      set_target_properties(
+	  SLATE PROPERTIES
+	  IMPORTED_LOCATION ${SLATE_LIBRARIES}
+	  CXX_STANDARD 17
+	  CUDA_STANDARD 11
+	  CXX_STANDARD_REQUIRED true
+	  CXX_EXTENSIONS false
+      )
+      #set_property(TARGET SLATE PROPERTY
+      #             LANGUAGE CUDA)
+
+      mark_as_advanced(SLATE_ROOT_DIR SLATE_INCLUDE_DIRS SLATE_LIBRARIES)
+    endif()
+
 .. admonition:: Contributed by
 
    David M. Rogers

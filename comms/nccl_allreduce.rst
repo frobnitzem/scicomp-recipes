@@ -3,7 +3,7 @@ NCCL Example
 
 Here's an example created based on the `NVIDIA Docs <https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/examples.html#example-2-one-device-per-process-or-thread>`_.
 
-.. code-block: C++
+.. code-block:: C++
 
     // helper.hh
     #include <iostream>
