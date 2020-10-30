@@ -67,11 +67,13 @@ Here's an example created based on the `NVIDIA Docs <https://docs.nvidia.com/dee
 	cudaStream_t stream;
 
 	NCCLH(MPIp _mpi) : mpi(_mpi) {
+            int numGPUs;
 	    if (mpi->rank == 0) ncclGetUniqueId(&id);
 	    MPICHECK(MPI_Bcast((void *)&id, sizeof(id), MPI_BYTE, 0, mpi->comm));
-	    //CUDACHECK(cudaSetDevice(mpi->rank % 1)); // skip this - we'll run 1 GPU per rank
-	    CUDACHECK(cudaStreamCreate(&stream));
-	    NCCLCHECK(ncclCommInitRank(&comm, mpi->ranks, id, mpi->rank));
+            CUDACHECK( cudaGetDeviceCount(&numGPUs) );
+	    CUDACHECK( cudaSetDevice(mpi->rank % numGPUs) );
+	    CUDACHECK( cudaStreamCreate(&stream) );
+	    NCCLCHECK( ncclCommInitRank(&comm, mpi->ranks, id, mpi->rank) );
 	}
 	~NCCLH() {
 	    CUDACHECK(cudaStreamDestroy(stream));
@@ -94,7 +96,7 @@ With this out of the way, the main code is simple::
     #include "helper.hh"
 
     int run(NCCLp nccl) {
-        int size = 32*1024*1024;
+        int size = 8*1024*1024; // 64 MB
         float *sendbuff, *recvbuff;
         CUDACHECK(cudaMalloc(&sendbuff, size * sizeof(float)));
         CUDACHECK(cudaMalloc(&recvbuff, size * sizeof(float)));
@@ -219,7 +221,8 @@ and the biggest file in the distribution,
       mark_as_advanced(NCCL_ROOT_DIR NCCL_INCLUDE_DIRS NCCL_LIBRARIES)
     endif()
 
-I built NCCL from their `github source <https://github.com/NVIDIA/nccl>`_,
+I built NCCL from their `github source <https://github.com/NVIDIA/nccl>`_
+(using ``make src.build CUDA_HOME=$CUDA_DIR NVCC_GENCODE="-gencode=arch=compute_70,code=sm_70"``)
 and left it in its build directory (nccl/build).  Then ran
 ``cmake -DCMAKE_PREFIX_PATH=/path/to/nccl/build ..``.  You'll need
 cuda and MPI modules loaded, and MPI build flags enabled.
@@ -234,6 +237,10 @@ You can run some quick tests on this using interactive mode,
 
 The performance plots below were gathered following the recipe
 for :doc:`/perf/scaling`.
+
+.. image:: nccl.svg
+   :alt: NCCL Scaling Plot
+   :align: center
 
 .. admonition:: Contributed by
 

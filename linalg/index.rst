@@ -3,14 +3,14 @@
 Linear Algebra
 ##############
 
-To include
+.. toctree::
 
-#. Linear algebra test timing info.
+   slate
 
-#. Slate compiling instructions
-
-#. Info. on dense & sparse solvers currently in use
-
-#. Notes on eigenvalues with ELPA vs. Scalapack
+.. to include:
+    #. Linear algebra test timing info.
+    #. Slate compiling instructions
+    #. Info. on dense & sparse solvers currently in use
+    #. Notes on eigenvalues with ELPA vs. Scalapack
    
 

@@ -1,0 +1,27 @@
+$DATA << EOD
+#nodes MB/s
+32 6958.43
+64 6461.37
+128 5473.55
+256 5067.36
+512 4870.74
+1024 4946.32
+EOD
+
+set term svg enhanced lw 2 fname 'Arial,18'
+set out "nccl.svg"
+set logscale x
+set xtics nomirror
+set ytics nomirror
+set grid y
+set yrange [0:25000]
+set xrange [96:24576]
+set xtics 96,2
+set mxtics 1
+
+set title "Allreduce Bus Bandwidth"
+
+set xlabel "GPUs"
+set ylabel "MB/s"
+plot $DATA using ($1*6):2 w l title "cuda 10, -g1"
+

@@ -29,11 +29,11 @@ and improving applications here at OLCF.
    models/index
    comms/index
    perf/index
+   linalg/index
 
    references
 
 .. some categories we don't yet have!
-   linalg/index
    taskpar/index
    halo/index
 

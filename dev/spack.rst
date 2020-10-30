@@ -1,3 +1,5 @@
+.. _spack:
+
 Compiling Using Spack
 #####################
 
