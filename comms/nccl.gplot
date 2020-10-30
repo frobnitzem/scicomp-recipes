@@ -1,12 +1,15 @@
+# These time are averages of 10 runs, grouped by first 10 and last 10
 $DATA << EOD
-#nodes MB/s
-32 6958.43
-64 6461.37
-128 5473.55
-256 5067.36
-512 4870.74
-1024 4946.32
+#nodes CPU MB/s(cold) CPU MB/s(warm) GPU MB/s(cold) GPU MB/s(warm)
+  32 1564.543532 1639.260284 18951.311416 37759.504407
+  64 1366.047321 1461.187215 18732.484030 32186.723228
+ 128 1237.809271 1282.276040 15675.228852 29904.445950
+ 256 1100.909540 1146.285765 17360.757906 27403.096336
+ 512  999.078974 1044.659180 15097.188149 26188.454574
+1024  920.393180  971.592311 11894.971122 23322.552726
+2048  843.514821  885.601708  8416.705846 23099.689598
 EOD
+
 
 set term svg enhanced lw 2 fname 'Arial,18'
 set out "nccl.svg"
@@ -14,14 +17,17 @@ set logscale x
 set xtics nomirror
 set ytics nomirror
 set grid y
-set yrange [0:25000]
+set yrange [0:40000]
 set xrange [96:24576]
 set xtics 96,2
 set mxtics 1
 
-set title "Allreduce Bus Bandwidth"
+set title "Allreduce Bus Bandwidth (2x vector size / completion time)"
 
-set xlabel "GPUs"
+set xlabel "Ranks"
 set ylabel "MB/s"
-plot $DATA using ($1*6):2 w l title "cuda 10, -g1"
+plot $DATA using ($1*6):2 w l title "CPU (cold)", \
+        '' using ($1*6):3 w l title "CPU (warm)", \
+        '' using ($1*6):4 w l title "NCCL (cold)", \
+        '' using ($1*6):5 w l title "NCCL (warm)"
 

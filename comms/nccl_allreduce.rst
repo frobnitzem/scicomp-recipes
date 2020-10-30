@@ -3,7 +3,7 @@ NCCL Example
 
 Here's an example created based on the `NVIDIA Docs <https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/examples.html#example-2-one-device-per-process-or-thread>`_.
 
-.. code-block: C++
+.. code-block:: C++
 
     // helper.hh
     #include <iostream>
@@ -69,10 +69,10 @@ Here's an example created based on the `NVIDIA Docs <https://docs.nvidia.com/dee
 	NCCLH(MPIp _mpi) : mpi(_mpi) {
             int numGPUs;
 	    if (mpi->rank == 0) ncclGetUniqueId(&id);
-	    MPICHECK(MPI_Bcast((void *)&id, sizeof(id), MPI_BYTE, 0, mpi->comm));
+	    MPICHECK( MPI_Bcast((void *)&id, sizeof(id), MPI_BYTE, 0, mpi->comm) );
             CUDACHECK( cudaGetDeviceCount(&numGPUs) );
 	    CUDACHECK( cudaSetDevice(mpi->rank % numGPUs) );
-	    CUDACHECK( cudaStreamCreate(&stream) );
+            CUDACHECK( cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking) );
 	    NCCLCHECK( ncclCommInitRank(&comm, mpi->ranks, id, mpi->rank) );
 	}
 	~NCCLH() {
@@ -95,16 +95,10 @@ With this out of the way, the main code is simple::
     // allreduce.cu
     #include "helper.hh"
 
-    int run(NCCLp nccl) {
-        int size = 8*1024*1024; // 64 MB
-        float *sendbuff, *recvbuff;
-        CUDACHECK(cudaMalloc(&sendbuff, size * sizeof(float)));
-        CUDACHECK(cudaMalloc(&recvbuff, size * sizeof(float)));
-        //communicating using NCCL
-        NCCLCHECK(ncclAllReduce((const void*)sendbuff, (void*)recvbuff, size, ncclFloat, ncclSum,
-                              nccl->comm, nccl->stream));
-        CUDACHECK(cudaStreamSynchronize(nccl->stream));
-
+    int size = 8*1024*1024; // 64 MB
+    int run(NCCLp nccl, const float *send, float *recv) {
+        NCCLCHECK(ncclAllReduce((const void*)send, (void*)recv, size, ncclFloat, ncclSum,
+                                nccl->comm, nccl->stream));
         return 0;
     }
 
@@ -112,8 +106,13 @@ With this out of the way, the main code is simple::
         auto mpi = std::make_shared<MPIH>(&argc, &argv);
         auto nccl = std::make_shared<NCCLH>(mpi);
 
+        float *sendbuff, *recvbuff;
+        CUDACHECK(cudaMalloc(&sendbuff, size * sizeof(float)));
+        CUDACHECK(cudaMalloc(&recvbuff, size * sizeof(float)));
+
         std::cout << "Hello" << std::endl;
-        run(nccl);
+        run(nccl, sendbuff, recvbuff);
+        CUDACHECK(cudaStreamSynchronize(nccl->stream));
 
         return 0;
     }
@@ -241,6 +240,23 @@ for :doc:`/perf/scaling`.
 .. image:: nccl.svg
    :alt: NCCL Scaling Plot
    :align: center
+
+The "bus" bandwidths reported are computed using the simple
+formula 2x(bytes per rank in allreduce) / time.  
+This makes them smaller than the true interconnect bandwidth.
+Times collected were averages over 10 allreduces with no blocking
+in-between.  The first 10 are marked as "cold" and the second
+10 are marked as "warm".  NCCL's first run has a noticeable, but
+worthwhile initialization cost.
+
+Also, the performance was insensitive to the layout of resource sets:
+
+.. code-block:: bash
+
+  jsrun --smpiargs=-gpu -n $((6*nodes)) -g1 -c7 -b packed:7
+  jsrun --smpiargs=-gpu -n $((2*nodes)) -g3 -c21 -a3 -b packed:7
+  jsrun --smpiargs=-gpu -n $nodes       -g6 -c42 -a6 -b packed:7
+
 
 .. admonition:: Contributed by
 
