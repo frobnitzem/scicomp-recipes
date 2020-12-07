@@ -30,6 +30,7 @@ and improving applications here at OLCF.
    comms/index
    perf/index
    linalg/index
+   apps/index
 
    references
 

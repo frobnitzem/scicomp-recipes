@@ -40,7 +40,7 @@ cool per-thread trace plots in
     namespace Performance {
     struct PerfData {
         double t0, t1;
-        uint64_t bytes, flops;
+        double bytes, flops;
         PerfData(double _t0, uint64_t _bytes, uint64_t _flops)
             : t0(_t0), bytes(_bytes), flops(_flops) {}
     };
@@ -62,7 +62,7 @@ cool per-thread trace plots in
                 Timers::append(label, std::move(datum));
             }
         private:
-            const std::string &label;
+            const std::string label;
             PerfData datum;
     };
     }
@@ -106,10 +106,10 @@ will be on the order of microseconds.
         void Timers::off() { tracing = false; }
 
         static std::ostream& operator<<(std::ostream& os, const PerfData& x) {
-            return os << "      { Start: " << x.t0 << std::endl
-                      << "      , Duration: " << x.t1-x.t0 << std::endl
-                      << "      , Bytes: " << x.bytes << std::endl
-                      << "      , Flops: " << x.flops << " }" << std::endl;
+            return os << "      { 'Start': " << x.t0 << std::endl
+                      << "      , 'Duration': " << x.t1-x.t0 << std::endl
+                      << "      , 'Bytes': " << x.bytes << std::endl
+                      << "      , 'Flops': " << x.flops << " }" << std::endl;
         }
         void Timers::show(std::ostream &os) {
             const char hdr1[] = "[ ";
@@ -123,14 +123,15 @@ will be on the order of microseconds.
                 ahdr = hdr2;
 
                 const char *bhdr = hdr3;
-
                 for(auto et : self) { // all events for thread
-                    os << bhdr << "\"" << et.first << "\" :" << std::endl;
+                    os << bhdr << "'" << et.first << "' : [" << std::endl;
                     bhdr = hdr4;
 
                     for(auto ev : et.second) {
                         os << ev;
+                        os << "," << std::endl;
                     }
+                    os << "      ]" << std::endl;
                 }
                 os << "  }" << std::endl;
             }

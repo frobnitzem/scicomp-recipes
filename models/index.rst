@@ -17,4 +17,5 @@ scripts that should be easy to adapt into your code.
    cuda
    kokkos
    openmp
+   pipeline
 
