@@ -7,6 +7,10 @@ want to get each CPU and GPU to perform the same task on
 different work items -- handing them off to the next worker
 after each is done.
 
+.. image:: pipeline.svg
+   :alt: A1A2A1 in parallel with B1B2B1 pipeline
+   :align: center
+
 CUDA accomplishes this with its ``streams`` API,
 while a fully-CPU implementation would use locks
 to wait on ``ready`` events.
@@ -110,12 +114,13 @@ Eventually worker ``A`` completes ``A2``, and moves onto ``A3``.
 Here, however, it can just re-use resources from ``A1``,
 as long as it first waits for ``Event B2``.
 
-In actual application code, worker ``A`` allocates two memory
-resources, ``A1`` and ``A2``, and calls ``std::swap(A1,A2)`` every time it
-completes a step.  This way ``A`` always writes to ``A1``
-and ``B`` always reads from ``A2``.
-Worker ``B`` can do something similar.
+In actual application code, workers ``A`` and ``B`` communicate
+via a circular buffer, reading or writing ``buf[i%2]`` at step i.
 This strategy is known as double-buffering.
+Note also how the code above actually works even when only
+one thread is available.  This regrettable situation might
+occur if the code is compiled without openmp or run incorrectly
+because the user has requested only 1 thread.
 
 There's a quirk with CUDA events, where they don't register
 until recorded.  We get around this by requiring a wait on
