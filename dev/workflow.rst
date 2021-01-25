@@ -139,13 +139,37 @@ CP2K provides a toolchain to compiler its other dependencies,
     --with-libsmm=install     We'll see how this works with CUDA.
     --with-libxsmm=no         x86_x64 is different than IBM's PPC (ppc64le)
 
-After running `install_cp2k_toolchain.sh` with these options,
+To use maximum available parallelism, I compiled using an interactive
+session on a node,
 
-    ./install_cp2k_toolchain.sh --with-libxsmm=no --with-openblas=system \
-         --with-mkl=no --with-scalapack=system --with-acml=no \
-         --with-fftw=system --with-reflapack=no  --enable-cuda --enable-omp \
-         --gpu-ver=V100 --dry-run
-         --math-mode=
+.. code-block:: shell
+
+    bsub -P CHM101 -nnodes 1 -q debug -W 30 -Is $SHELL
+
+After running `install_cp2k_toolchain.sh` with the options above,
+it provides further instructions.
+
+.. code-block:: shell
+
+    Now copy:
+     cp /ccs/proj/CHM101/cp2k/tools/toolchain/install/arch/* to the cp2k/arch/ directory
+    To use the installed tools and libraries and cp2k version
+    compiled with it you will first need to execute at the prompt:
+      source /ccs/proj/CHM101/cp2k/tools/toolchain/install/setup
+    To build CP2K you should change directory:
+      cd cp2k/
+      make -j 128 ARCH=local VERSION="ssmp sdbg psmp pdbg"
+
+    arch files for GPU enabled CUDA versions are named "local_cuda.*"
+    arch files for valgrind versions are named "local_valgrind.*"
+    arch files for coverage versions are named "local_coverage.*"
+
+I added the extra ``source ...`` line to ``/ccs/proj/CHM101/cp2k-env.sh``,
+and then compiled.
+Apparently, the fortran sanitizer is not available on our system (with gcc 6.4.0),
+and so I had to manually remove ``-fsanitize=leak`` from the ``arch/local*`` files.
+
+
 
 TODO
 ====
