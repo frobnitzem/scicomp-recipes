@@ -24,7 +24,7 @@ cp2k - a quantum chemistry package with lots of dependencies.
     cd /ccs/proj/CHM101
     git clone --depth 1 --recurse-submodules https://github.com/cp2k/cp2k.git cp2k
 
-Going through the dependency list, `make` is there, but
+Going through the dependency list in the INSTALL instructions, `make` is there, but
 `python`-3 comes from a module.
 
 .. code-block:: shell
@@ -45,6 +45,7 @@ We'll end up with the following,
     module load python/3
     module load spectrum-mpi
     module load cuda
+    module load hdf5
     module load openblas
     module load netlib-scalapack # includes blas, CPU only
     # non-threaded BLAS is preferred (TODO)
@@ -67,7 +68,9 @@ CP2K provides a toolchain to compiler its other dependencies,
     --mpi-mode=openmpi
 
                  Summit is an IBM system, and uses spectrum-mpi
-                 as provided by a module.  It is based on openmpi.
+                 as provided by a module.  It is based on openmpi 4.0.1,
+                 and supports the MPI 3.2 standard.
+                 (https://www.ibm.com/support/knowledgecenter/SSZTET_10.3/smpi_overview.html).
                  Spectrum updates are deployed every 6 months or so.
                  Upgrades and downtimes are announced weeks in advanced,
                  and put on the facility calendar.
@@ -133,11 +136,12 @@ CP2K provides a toolchain to compiler its other dependencies,
     --with-libxc=install      The tool will install.
     --with-libint=install
     --with-spglib=install
-    --with-sirius=install
+    --with-sirius=no          Trial and error - not currently building.
     --with-spfft=install
     --with-libvdwxc=install
-    --with-libsmm=install     We'll see how this works with CUDA.
+    --with-libsmm=install
     --with-libxsmm=no         x86_x64 is different than IBM's PPC (ppc64le)
+    --with-libvori=no
 
 To use maximum available parallelism, I compiled using an interactive
 session on a node,
@@ -166,9 +170,19 @@ it provides further instructions.
 
 I added the extra ``source ...`` line to ``/ccs/proj/CHM101/cp2k-env.sh``,
 and then compiled.
-Apparently, the fortran sanitizer is not available on our system (with gcc 6.4.0),
-and so I had to manually remove ``-fsanitize=leak`` from the ``arch/local*`` files.
+Apparently, the fortran sanitizer is not available on our system (at least with gcc 6.4.0).
+CP2K makes it easy to fiddle with compile flags by editing the ``arch/local*`` files though,
+so you can manually remove ``-fsanitize=leak`` from the ``arch/local*`` files.
 
+That's not necessary in this case, since the main executable you want to build is:
+
+.. code-block:: shell
+
+    make -j 4 ARCH=local_cuda VERSION=psmp
+
+You can check that this binary "should" be GPU-enabled by running ``ldd exe/local_cuda/cp2k.psmp``.
+This shows several NVIDIA libraries, so at least we know some function calls to those libraries
+exist.  You should always check your code's performance and correctness to be sure.
 
 
 TODO
