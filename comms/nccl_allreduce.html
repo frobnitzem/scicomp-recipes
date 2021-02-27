@@ -1,0 +1,504 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3.1. NCCL Example &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Performance Measurement" href="../perf/index.html" />
+    <link rel="prev" title="3. Communication Patterns" href="index.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">1. Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Communication Patterns</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../perf/index.html">4. Performance Measurement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../perf/user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perf/scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">3. </span>Communication Patterns</a> &raquo;</li>
+        
+      <li><span class="section-number">3.1. </span>NCCL Example</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/comms/nccl_allreduce.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="nccl-example">
+<h1><span class="section-number">3.1. </span>NCCL Example<a class="headerlink" href="#nccl-example" title="Permalink to this headline">¶</a></h1>
+<p>Here’s an example created based on the <a class="reference external" href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/examples.html#example-2-one-device-per-process-or-thread" target="_blank">NVIDIA Docs</a>.</p>
+<div class="highlight-C++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// helper.hh</span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;mpi.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;cuda_runtime.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;nccl.h&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#define MPICHECK(cmd) do {                          \</span>
+<span class="cp">  int e = cmd;                                      \</span>
+<span class="cp">  if( e != MPI_SUCCESS ) {                          \</span>
+<span class="cp">    printf(&quot;Failed: MPI error %s:%d &#39;%d&#39;\n&quot;,        \</span>
+<span class="cp">        __FILE__,__LINE__, e);   \</span>
+<span class="cp">    exit(EXIT_FAILURE);                             \</span>
+<span class="cp">  }                                                 \</span>
+<span class="cp">} while(0)</span>
+
+<span class="cp">#define CUDACHECK(cmd) do {                         \</span>
+<span class="cp">  cudaError_t e = cmd;                              \</span>
+<span class="cp">  if( e != cudaSuccess ) {                          \</span>
+<span class="cp">    printf(&quot;Failed: Cuda error %s:%d &#39;%s&#39;\n&quot;,       \</span>
+<span class="cp">        __FILE__,__LINE__,cudaGetErrorString(e));   \</span>
+<span class="cp">    exit(EXIT_FAILURE);                             \</span>
+<span class="cp">  }                                                 \</span>
+<span class="cp">} while(0)</span>
+
+<span class="cp">#define NCCLCHECK(cmd) do {                         \</span>
+<span class="cp">  ncclResult_t r = cmd;                             \</span>
+<span class="cp">  if (r!= ncclSuccess) {                            \</span>
+<span class="cp">    printf(&quot;Failed, NCCL error %s:%d &#39;%s&#39;\n&quot;,       \</span>
+<span class="cp">        __FILE__,__LINE__,ncclGetErrorString(r));   \</span>
+<span class="cp">    exit(EXIT_FAILURE);                             \</span>
+<span class="cp">  }                                                 \</span>
+<span class="cp">} while(0)</span>
+
+<span class="k">struct</span> <span class="nc">MPIH</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">ranks</span><span class="p">,</span> <span class="n">rank</span><span class="p">;</span>
+    <span class="n">MPI_Comm</span> <span class="n">comm</span><span class="p">;</span>
+
+    <span class="n">MPIH</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">[])</span> <span class="o">:</span> <span class="n">comm</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">provided</span><span class="p">;</span>
+        <span class="n">MPICHECK</span><span class="p">(</span> <span class="n">MPI_Init_thread</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span> <span class="n">argv</span><span class="p">,</span> <span class="n">MPI_THREAD_FUNNELED</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">provided</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">assert</span><span class="p">(</span><span class="n">provided</span> <span class="o">&gt;=</span> <span class="n">MPI_THREAD_FUNNELED</span><span class="p">);</span>
+        <span class="n">MPICHECK</span><span class="p">(</span> <span class="n">MPI_Comm_size</span><span class="p">(</span> <span class="n">comm</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ranks</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">MPICHECK</span><span class="p">(</span> <span class="n">MPI_Comm_rank</span><span class="p">(</span> <span class="n">comm</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rank</span> <span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">MPIH</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">MPI_Finalize</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">using</span> <span class="n">MPIp</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">MPIH</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">struct</span> <span class="nc">NCCLH</span> <span class="p">{</span>
+    <span class="n">MPIp</span> <span class="n">mpi</span><span class="p">;</span>
+    <span class="n">ncclUniqueId</span> <span class="n">id</span><span class="p">;</span>
+    <span class="n">ncclComm_t</span> <span class="n">comm</span><span class="p">;</span>
+    <span class="n">cudaStream_t</span> <span class="n">stream</span><span class="p">;</span>
+
+    <span class="n">NCCLH</span><span class="p">(</span><span class="n">MPIp</span> <span class="n">_mpi</span><span class="p">)</span> <span class="o">:</span> <span class="n">mpi</span><span class="p">(</span><span class="n">_mpi</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">numGPUs</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mpi</span><span class="o">-&gt;</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">ncclGetUniqueId</span><span class="p">(</span><span class="o">&amp;</span><span class="n">id</span><span class="p">);</span>
+        <span class="n">MPICHECK</span><span class="p">(</span> <span class="n">MPI_Bcast</span><span class="p">((</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">id</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">id</span><span class="p">),</span> <span class="n">MPI_BYTE</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mpi</span><span class="o">-&gt;</span><span class="n">comm</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">CUDACHECK</span><span class="p">(</span> <span class="n">cudaGetDeviceCount</span><span class="p">(</span><span class="o">&amp;</span><span class="n">numGPUs</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">CUDACHECK</span><span class="p">(</span> <span class="n">cudaSetDevice</span><span class="p">(</span><span class="n">mpi</span><span class="o">-&gt;</span><span class="n">rank</span> <span class="o">%</span> <span class="n">numGPUs</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">CUDACHECK</span><span class="p">(</span> <span class="n">cudaStreamCreateWithFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">stream</span><span class="p">,</span> <span class="n">cudaStreamNonBlocking</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">NCCLCHECK</span><span class="p">(</span> <span class="n">ncclCommInitRank</span><span class="p">(</span><span class="o">&amp;</span><span class="n">comm</span><span class="p">,</span> <span class="n">mpi</span><span class="o">-&gt;</span><span class="n">ranks</span><span class="p">,</span> <span class="n">id</span><span class="p">,</span> <span class="n">mpi</span><span class="o">-&gt;</span><span class="n">rank</span><span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">NCCLH</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">CUDACHECK</span><span class="p">(</span><span class="n">cudaStreamDestroy</span><span class="p">(</span><span class="n">stream</span><span class="p">));</span>
+        <span class="n">ncclCommDestroy</span><span class="p">(</span><span class="n">comm</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">using</span> <span class="n">NCCLp</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NCCLH</span><span class="o">&gt;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>It’s always a good idea to wrap up initialization and finalization
+code inside classes to manage them.</p>
+<p>Note that we’re using shared-pointers here, since lots of different
+parts of the code might end up storing the NCCL-helper struct above.
+Shared pointers act just like pointers (de-reference with <code class="docutils literal notranslate"><span class="pre">*</span></code> or <code class="docutils literal notranslate"><span class="pre">-&gt;</span></code>).
+However, they track reference-counts and destroy the object when it hits zero.</p>
+<p>With this out of the way, the main code is simple:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// allreduce.cu</span>
+<span class="cp">#include</span> <span class="cpf">&quot;helper.hh&quot;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">8</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">;</span> <span class="c1">// 64 MB</span>
+<span class="kt">int</span> <span class="nf">run</span><span class="p">(</span><span class="n">NCCLp</span> <span class="n">nccl</span><span class="p">,</span> <span class="k">const</span> <span class="kt">float</span> <span class="o">*</span><span class="n">send</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">recv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">NCCLCHECK</span><span class="p">(</span><span class="n">ncclAllReduce</span><span class="p">((</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">send</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">recv</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">ncclFloat</span><span class="p">,</span> <span class="n">ncclSum</span><span class="p">,</span>
+                            <span class="n">nccl</span><span class="o">-&gt;</span><span class="n">comm</span><span class="p">,</span> <span class="n">nccl</span><span class="o">-&gt;</span><span class="n">stream</span><span class="p">));</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="k">auto</span> <span class="n">mpi</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MPIH</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">nccl</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">NCCLH</span><span class="o">&gt;</span><span class="p">(</span><span class="n">mpi</span><span class="p">);</span>
+
+    <span class="kt">float</span> <span class="o">*</span><span class="n">sendbuff</span><span class="p">,</span> <span class="o">*</span><span class="n">recvbuff</span><span class="p">;</span>
+    <span class="n">CUDACHECK</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sendbuff</span><span class="p">,</span> <span class="n">size</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)));</span>
+    <span class="n">CUDACHECK</span><span class="p">(</span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">recvbuff</span><span class="p">,</span> <span class="n">size</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)));</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Hello&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">run</span><span class="p">(</span><span class="n">nccl</span><span class="p">,</span> <span class="n">sendbuff</span><span class="p">,</span> <span class="n">recvbuff</span><span class="p">);</span>
+    <span class="n">CUDACHECK</span><span class="p">(</span><span class="n">cudaStreamSynchronize</span><span class="p">(</span><span class="n">nccl</span><span class="o">-&gt;</span><span class="n">stream</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here’s the cmake magic needed to compile it,</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># CMakeLists.txt</span>
+<span class="nb">CMAKE_MINIMUM_REQUIRED</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.17</span><span class="p">)</span>
+
+<span class="nb">PROJECT</span><span class="p">(</span><span class="s">use_nccl</span> <span class="s">CXX</span> <span class="s">CUDA</span><span class="p">)</span>
+
+<span class="c"># Dependency Packages</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span> <span class="s">CMAKE_MODULE_PATH</span> <span class="s2">&quot;${CMAKE_SOURCE_DIR}/cmake&quot;</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">MPI</span> <span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">find_package</span><span class="p">(</span><span class="s">NCCL</span> <span class="s">REQUIRED</span><span class="p">)</span>
+
+<span class="c"># Global project properties</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span> <span class="s">11</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span> <span class="s">True</span><span class="p">)</span>
+
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">allreduce</span> <span class="s">allreduce.cu</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">allreduce</span> <span class="s">PUBLIC</span> <span class="s">NCCL</span> <span class="s">MPI::MPI_CXX</span><span class="p">)</span>
+
+<span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">allreduce</span> <span class="s">PROPERTY</span> <span class="s">CUDA_ARCHITECTURES</span> <span class="s">70</span><span class="p">)</span>
+<span class="nb">install</span><span class="p">(</span><span class="s">TARGETS</span> <span class="s">allreduce</span> <span class="s">DESTINATION</span> <span class="s">bin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and the biggest file in the distribution,</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Find the nccl libraries</span>
+<span class="c"># from https://github.com/xuhdev/pytorch/blob/a3b4accf014e18bf84f58d3018854435cbc3d55b/cmake/Modules/FindNCCL.cmake</span>
+<span class="c">#</span>
+<span class="c"># The following variables are optionally searched for defaults</span>
+<span class="c">#  NCCL_ROOT: Base directory where all NCCL components are found</span>
+<span class="c">#  NCCL_INCLUDE_DIR: Directory where NCCL header is found</span>
+<span class="c">#  NCCL_LIB_DIR: Directory where NCCL library is found</span>
+<span class="c">#</span>
+<span class="c"># The following are set after configuration is done:</span>
+<span class="c">#  NCCL_FOUND</span>
+<span class="c">#  NCCL_INCLUDE_DIRS</span>
+<span class="c">#  NCCL_LIBRARIES</span>
+<span class="c">#</span>
+<span class="c"># The path hints include CUDA_TOOLKIT_ROOT_DIR seeing as some folks</span>
+<span class="c"># install NCCL in the same location as the CUDA toolkit.</span>
+<span class="c"># See https://github.com/caffe2/caffe2/issues/1601</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">NCCL_INCLUDE_DIR</span> <span class="o">$ENV{</span><span class="nv">NCCL_INCLUDE_DIR</span><span class="o">}</span> <span class="s">CACHE</span> <span class="s">PATH</span> <span class="s2">&quot;Folder contains NVIDIA NCCL headers&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">NCCL_LIB_DIR</span> <span class="o">$ENV{</span><span class="nv">NCCL_LIB_DIR</span><span class="o">}</span> <span class="s">CACHE</span> <span class="s">PATH</span> <span class="s2">&quot;Folder contains NVIDIA NCCL libraries&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">NCCL_VERSION</span> <span class="o">$ENV{</span><span class="nv">NCCL_VERSION</span><span class="o">}</span> <span class="s">CACHE</span> <span class="s">STRING</span> <span class="s2">&quot;Version of NCCL to build with&quot;</span><span class="p">)</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span> <span class="s">NCCL_ROOT</span> <span class="o">${</span><span class="nv">NCCL_ROOT_DIR</span><span class="o">}</span> <span class="o">${</span><span class="nv">CUDA_TOOLKIT_ROOT_DIR</span><span class="o">}</span><span class="p">)</span>
+<span class="c"># Compatible layer for CMake &lt;3.12. NCCL_ROOT will be accounted in for searching paths and libraries for CMake &gt;=3.12.</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span> <span class="s">CMAKE_PREFIX_PATH</span> <span class="o">${</span><span class="nv">NCCL_ROOT</span><span class="o">}</span><span class="p">)</span>
+
+<span class="nb">find_path</span><span class="p">(</span><span class="s">NCCL_INCLUDE_DIRS</span>
+  <span class="s">NAMES</span> <span class="s">nccl.h</span>
+  <span class="s">HINTS</span> <span class="o">${</span><span class="nv">NCCL_INCLUDE_DIR</span><span class="o">}</span><span class="p">)</span>
+
+<span class="nb">if</span> <span class="p">(</span><span class="s">USE_STATIC_NCCL</span><span class="p">)</span>
+  <span class="nb">MESSAGE</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&quot;USE_STATIC_NCCL is set. Linking with static NCCL library.&quot;</span><span class="p">)</span>
+  <span class="nb">SET</span><span class="p">(</span><span class="s">NCCL_LIBNAME</span> <span class="s2">&quot;nccl_static&quot;</span><span class="p">)</span>
+  <span class="nb">if</span> <span class="p">(</span><span class="s">NCCL_VERSION</span><span class="p">)</span>  <span class="c"># Prefer the versioned library if a specific NCCL version is specified</span>
+    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_LIBRARY_SUFFIXES</span> <span class="s2">&quot;.a.${NCCL_VERSION}&quot;</span> <span class="o">${</span><span class="nv">CMAKE_FIND_LIBRARY_SUFFIXES</span><span class="o">}</span><span class="p">)</span>
+  <span class="nb">endif</span><span class="p">()</span>
+<span class="nb">else</span><span class="p">()</span>
+  <span class="nb">SET</span><span class="p">(</span><span class="s">NCCL_LIBNAME</span> <span class="s2">&quot;nccl&quot;</span><span class="p">)</span>
+  <span class="nb">if</span> <span class="p">(</span><span class="s">NCCL_VERSION</span><span class="p">)</span>  <span class="c"># Prefer the versioned library if a specific NCCL version is specified</span>
+    <span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_FIND_LIBRARY_SUFFIXES</span> <span class="s2">&quot;.so.${NCCL_VERSION}&quot;</span> <span class="o">${</span><span class="nv">CMAKE_FIND_LIBRARY_SUFFIXES</span><span class="o">}</span><span class="p">)</span>
+  <span class="nb">endif</span><span class="p">()</span>
+<span class="nb">endif</span><span class="p">()</span>
+
+<span class="nb">find_library</span><span class="p">(</span><span class="s">NCCL_LIBRARIES</span>
+  <span class="s">NAMES</span> <span class="o">${</span><span class="nv">NCCL_LIBNAME</span><span class="o">}</span>
+  <span class="s">HINTS</span> <span class="o">${</span><span class="nv">NCCL_LIB_DIR</span><span class="o">}</span><span class="p">)</span>
+
+<span class="nb">include</span><span class="p">(</span><span class="s">FindPackageHandleStandardArgs</span><span class="p">)</span>
+<span class="nb">find_package_handle_standard_args</span><span class="p">(</span><span class="s">NCCL</span> <span class="s">DEFAULT_MSG</span> <span class="s">NCCL_INCLUDE_DIRS</span> <span class="s">NCCL_LIBRARIES</span><span class="p">)</span>
+
+<span class="nb">if</span><span class="p">(</span><span class="s">NCCL_FOUND</span><span class="p">)</span>
+  <span class="nb">set</span> <span class="p">(</span><span class="s">NCCL_HEADER_FILE</span> <span class="s2">&quot;${NCCL_INCLUDE_DIRS}/nccl.h&quot;</span><span class="p">)</span>
+  <span class="nb">message</span> <span class="p">(</span><span class="s">STATUS</span> <span class="s2">&quot;Determining NCCL version from the header file: ${NCCL_HEADER_FILE}&quot;</span><span class="p">)</span>
+  <span class="nb">file</span> <span class="p">(</span><span class="s">STRINGS</span> <span class="o">${</span><span class="nv">NCCL_HEADER_FILE</span><span class="o">}</span> <span class="s">NCCL_MAJOR_VERSION_DEFINED</span>
+        <span class="s">REGEX</span> <span class="s2">&quot;^[ \t]*#define[ \t]+NCCL_MAJOR[ \t]+[0-9]+.*$&quot;</span> <span class="s">LIMIT_COUNT</span> <span class="s">1</span><span class="p">)</span>
+  <span class="nb">if</span> <span class="p">(</span><span class="s">NCCL_MAJOR_VERSION_DEFINED</span><span class="p">)</span>
+    <span class="nb">string</span> <span class="p">(</span><span class="s">REGEX</span> <span class="s">REPLACE</span> <span class="s2">&quot;^[ \t]*#define[ \t]+NCCL_MAJOR[ \t]+&quot;</span> <span class="s2">&quot;&quot;</span>
+            <span class="s">NCCL_MAJOR_VERSION</span> <span class="o">${</span><span class="nv">NCCL_MAJOR_VERSION_DEFINED</span><span class="o">}</span><span class="p">)</span>
+    <span class="nb">message</span> <span class="p">(</span><span class="s">STATUS</span> <span class="s2">&quot;NCCL_MAJOR_VERSION: ${NCCL_MAJOR_VERSION}&quot;</span><span class="p">)</span>
+  <span class="nb">endif</span> <span class="p">()</span>
+  <span class="nb">message</span><span class="p">(</span><span class="s">STATUS</span> <span class="s2">&quot;Found NCCL (include: ${NCCL_INCLUDE_DIRS}, library: ${NCCL_LIBRARIES})&quot;</span><span class="p">)</span>
+  <span class="c"># Create a new-style imported target (NCCL)</span>
+  <span class="nb">if</span> <span class="p">(</span><span class="s">USE_STATIC_NCCL</span><span class="p">)</span>
+      <span class="nb">add_library</span><span class="p">(</span><span class="s">NCCL</span> <span class="s">STATIC</span> <span class="s">IMPORTED</span><span class="p">)</span>
+  <span class="nb">else</span><span class="p">()</span>
+      <span class="nb">add_library</span><span class="p">(</span><span class="s">NCCL</span> <span class="s">SHARED</span> <span class="s">IMPORTED</span><span class="p">)</span>
+  <span class="nb">endif</span> <span class="p">()</span>
+  <span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">NCCL</span> <span class="s">PROPERTY</span>
+               <span class="s">IMPORTED_LOCATION</span> <span class="o">${</span><span class="nv">NCCL_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+  <span class="nb">set_property</span><span class="p">(</span><span class="s">TARGET</span> <span class="s">NCCL</span> <span class="s">PROPERTY</span>
+               <span class="s">LANGUAGE</span> <span class="s">CUDA</span><span class="p">)</span>
+  <span class="nb">target_include_directories</span><span class="p">(</span><span class="s">NCCL</span> <span class="s">INTERFACE</span> <span class="o">${</span><span class="nv">NCCL_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
+
+  <span class="nb">mark_as_advanced</span><span class="p">(</span><span class="s">NCCL_ROOT_DIR</span> <span class="s">NCCL_INCLUDE_DIRS</span> <span class="s">NCCL_LIBRARIES</span><span class="p">)</span>
+<span class="nb">endif</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>I built NCCL from their <a class="reference external" href="https://github.com/NVIDIA/nccl" target="_blank">github source</a>
+(using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">src.build</span> <span class="pre">CUDA_HOME=$CUDA_DIR</span> <span class="pre">NVCC_GENCODE=&quot;-gencode=arch=compute_70,code=sm_70&quot;</span></code>)
+and left it in its build directory (nccl/build).  Then ran
+<code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">-DCMAKE_PREFIX_PATH=/path/to/nccl/build</span> <span class="pre">..</span></code>.  You’ll need
+cuda and MPI modules loaded, and MPI build flags enabled.</p>
+<p>You can run some quick tests on this using interactive mode,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bsub -nnodes <span class="m">1</span> -W <span class="m">30</span> -P CHM101 -Is <span class="nv">$SHELL</span>
+<span class="c1"># run 6 ranks per node</span>
+jsrun --smpiargs<span class="o">=</span>-gpu -r <span class="m">6</span> -g <span class="m">1</span> -c <span class="m">7</span> -b packed:7 -EOMP_NUM_THREADS<span class="o">=</span><span class="m">7</span> ./allreduce
+</pre></div>
+</div>
+<p>The performance plots below were gathered following the recipe
+for <a class="reference internal" href="../perf/scaling.html"><span class="doc">Making a Scaling Plot</span></a>.</p>
+<img alt="NCCL Scaling Plot" class="align-center" src="../_images/nccl.svg" /><p>The “bus” bandwidths reported are computed using the simple
+formula 2x(bytes per rank in allreduce) / time.
+This makes them smaller than the true interconnect bandwidth.
+Times collected were averages over 10 allreduces with no blocking
+in-between.  The first 10 are marked as “cold” and the second
+10 are marked as “warm”.  NCCL’s first run has a noticeable, but
+worthwhile initialization cost.</p>
+<p>Also, the performance was insensitive to the layout of resource sets:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jsrun --smpiargs<span class="o">=</span>-gpu -n <span class="k">$((</span><span class="m">6</span><span class="o">*</span>nodes<span class="k">))</span> -g1 -c7 -b packed:7
+jsrun --smpiargs<span class="o">=</span>-gpu -n <span class="k">$((</span><span class="m">2</span><span class="o">*</span>nodes<span class="k">))</span> -g3 -c21 -a3 -b packed:7
+jsrun --smpiargs<span class="o">=</span>-gpu -n <span class="nv">$nodes</span>       -g6 -c42 -a6 -b packed:7
+</pre></div>
+</div>
+<div class="admonition-contributed-by admonition">
+<p class="first admonition-title">Contributed by</p>
+<p class="last">David M. Rogers</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../perf/index.html" class="btn btn-neutral float-right" title="4. Performance Measurement" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="3. Communication Patterns" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

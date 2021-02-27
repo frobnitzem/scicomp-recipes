@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.4. Compiling Using Spack &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.5. Git Submodules" href="git_submodules.html" />
+    <link rel="prev" title="1.3. Using cmake" href="cmake.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Development Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../perf/index.html">4. Performance Measurement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../perf/user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perf/scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">1. </span>Development Tools</a> &raquo;</li>
+        
+      <li><span class="section-number">1.4. </span>Compiling Using Spack</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/dev/spack.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="compiling-using-spack">
+<span id="spack"></span><h1><span class="section-number">1.4. </span>Compiling Using Spack<a class="headerlink" href="#compiling-using-spack" title="Permalink to this headline">¶</a></h1>
+<p>High-performance computing systems are large and complex,
+with many moving parts.  Being a productive developer
+requires having a stable, working set of development tools,
+libraries, and systems at ready.</p>
+<p><a class="reference external" href="https://spack.readthedocs.io/en/latest/index.html" target="_blank">Spack</a>
+is a package manager for scientific software
+stacks that allows multiple versions and variations of
+each software to be installed simultaneously.
+For example, gromacs has both MPI and non-MPI,
+GPU and non-GPU, as well as single and double precision variants.
+Package managers for most Linux distributions use global
+installation locations and a single, standardized set
+of options.  Ubuntu linux defaults to installing
+the single-precision, non-MPI, non-GPU gromacs.
+In contrast, spack creates parallel
+installs so that all <span class="math notranslate nohighlight">\(2^3\)</span> variants of gromacs
+can be installed without conflicts.</p>
+<p>This solution is much nicer than naming the libraries
+and header files of every variant differently.
+Instead, each variant is installed into a directory like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>base/archname/compilername/pkgname-ver-hash
+</pre></div>
+</div>
+<div class="section" id="installing-spack">
+<h2><span class="section-number">1.4.1. </span>Installing Spack<a class="headerlink" href="#installing-spack" title="Permalink to this headline">¶</a></h2>
+<p>Every computing will have their own specific guidelines.
+Most already use some form of spack to build their
+software.  For example, see</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/NERSC/spack" target="_blank">NERSC Spack</a></li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Ideally, one spack program would exist on
+each computing system.  Configuration files would exist
+at the system-level, project-level, and user-level.</p>
+<p>Each level would install packages into its respective
+visibility level (system, project, or user).</p>
+<p class="last">In such a setup, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> files at each level
+would set their own values for <code class="docutils literal notranslate"><span class="pre">install_tree</span></code>,
+<code class="docutils literal notranslate"><span class="pre">build_stage</span></code>, and <code class="docutils literal notranslate"><span class="pre">source_cache</span></code>, while allowing
+searching higher levels using <code class="docutils literal notranslate"><span class="pre">upstreams.yaml</span></code>
+as explained in
+<a class="reference external" href="https://spack.readthedocs.io/en/latest/chain.html" target="_blank">spack chaining</a>.</p>
+</div>
+<p>At present, most systems expect you to install your own copy of spack,
+and then configure <code class="docutils literal notranslate"><span class="pre">compilers.yaml</span></code> and
+<code class="docutils literal notranslate"><span class="pre">packages.yaml</span></code> to point to key system-installed infrastructure
+like vendor-specific compilers, MPI, Blas/Lapack/MKL, and
+common/complicated libraries like FFTW, HDF5/netcdf, PETSC, papi,
+trilinos, etc.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone --depth <span class="m">1</span> https://github.com/spack/spack.git
+$ <span class="nb">source</span> spack/share/spack/setup-env.sh
+$ spack install kokkos+aggressive_vectorization+cuda+enable_lambda+openmp~serial <span class="nv">cxxstd</span><span class="o">=</span>c++11 <span class="nv">host_arch</span><span class="o">=</span>HSW <span class="nv">gpu_arch</span><span class="o">=</span>Volta70
+</pre></div>
+</div>
+<div class="section" id="quick-reference">
+<h3><span class="section-number">1.4.1.1. </span>Quick Reference<a class="headerlink" href="#quick-reference" title="Permalink to this headline">¶</a></h3>
+<p>After getting spack installed and running, use the following steps
+to setup the libaries and programming language tools mentioned
+in this book.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ git clone https://bitbucket.org/icldistcomp/parsec.git
+$ <span class="nb">cd</span> parsec
+$ spack repo add <span class="nv">$PWD</span>/contrib/spack
+$ spack install parsec@devel
+$ spack load parsec
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="todo">
+<h2><span class="section-number">1.4.2. </span>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<p>Here are some steps that would help future users:</p>
+<ol class="arabic simple">
+<li>build a ready-made docker image</li>
+<li>document some strategies for directory tree layout</li>
+</ol>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="git_submodules.html" class="btn btn-neutral float-right" title="1.5. Git Submodules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cmake.html" class="btn btn-neutral float-left" title="1.3. Using cmake" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4.2. Making a Scaling Plot &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Linear Algebra" href="../linalg/index.html" />
+    <link rel="prev" title="4.1. User-Level Timers" href="user_timing.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">1. Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Performance Measurement</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">4. </span>Performance Measurement</a> &raquo;</li>
+        
+      <li><span class="section-number">4.2. </span>Making a Scaling Plot</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/perf/scaling.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="making-a-scaling-plot">
+<h1><span class="section-number">4.2. </span>Making a Scaling Plot<a class="headerlink" href="#making-a-scaling-plot" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This cut and paste code makes it simpler,
+but always exercise caution when ramping up
+to the whole machine.
+Especially watch out for unintended outputs like
+<em>log files</em> that can explode when node counts go up.</p>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># run.lsf</span>
+<span class="c1">#!/bin/bash</span>
+<span class="c1">#BSUB -P chm101</span>
+<span class="c1">#BSUB -W 0:10</span>
+<span class="c1">#BSUB -alloc_flags NVME</span>
+<span class="c1">#BSUB -nnodes 16</span>
+<span class="c1">#BSUB -J scaling</span>
+<span class="c1">#BSUB -o scaling.%J</span>
+
+. /ccs/proj/chm101/setup-env.sh
+
+<span class="nv">EXE</span><span class="o">=</span><span class="nv">$PWD</span>/the_code
+<span class="nv">COPY</span><span class="o">=</span><span class="nv">$PWD</span>/the_copy_script
+
+<span class="nb">echo</span> <span class="s2">&quot;Starting scaling calculation of </span><span class="nv">$EXE</span><span class="s2">&quot;</span>
+<span class="nv">ver</span><span class="o">=</span><span class="sb">`</span>git rev-parse HEAD<span class="sb">`</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> -eq <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Git commit hash = </span><span class="nv">$ver</span><span class="s2">&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;Plus Diffs&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+  git diff <span class="nv">$ver</span> <span class="p">|</span> cat
+  <span class="nb">echo</span> <span class="s2">&quot;--------------------------------------------------------&quot;</span>
+  <span class="nb">echo</span>
+<span class="k">fi</span>
+
+<span class="nb">let</span> <span class="nv">nodes</span><span class="o">=(</span>LSB_MAX_NUM_PROCESSORS-1<span class="o">)</span>/42
+<span class="nb">let</span> <span class="nv">min_nodes</span><span class="o">=</span>nodes/16
+
+mkdir -p <span class="nv">$PROJWORK</span>/chm101/scaling
+<span class="nb">cd</span> <span class="nv">$PROJWORK</span>/chm101/scaling
+<span class="nb">export</span> <span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">7</span>
+
+<span class="k">while</span> <span class="o">[</span> <span class="nv">$nodes</span> -ge <span class="nv">$min_nodes</span> <span class="o">]</span><span class="p">;</span> <span class="k">do</span>
+   <span class="nb">echo</span> <span class="s2">&quot;Starting copy on </span><span class="nv">$nodes</span><span class="s2"> nodes at `date`&quot;</span>
+   jsrun -n <span class="nv">$nodes</span> -c7 -b packed:7 <span class="nv">$COPY</span>
+   <span class="nb">echo</span> <span class="s2">&quot;Starting run on </span><span class="nv">$nodes</span><span class="s2"> nodes at `date`&quot;</span>
+   jsrun -n <span class="k">$((</span><span class="m">6</span><span class="o">*</span><span class="nv">$nodes</span><span class="k">))</span> -g1 -c7 -b packed:7 <span class="nv">$EXE</span>
+   <span class="nb">let</span> <span class="nv">nodes</span><span class="o">=</span>nodes/2
+<span class="k">done</span>
+</pre></div>
+</div>
+<p>There are some really useful coventions demonstrated here:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">In the bsub flags, we request the node-local buffer/disk drives (NVME).</p>
+</li>
+<li><p class="first">The job output file is named something useful. (-o)</p>
+</li>
+<li><p class="first">There is a setup-env.sh script that loads all the needed modules.</p>
+<p>This prevents us from having to load modules on login (which pollutes
+the module space) and from forgetting to load modules and having
+the job crash.</p>
+</li>
+<li><p class="first">We can calculate number of nodes from the number of processors
+(Summit has 42 cores per node)</p>
+</li>
+<li><p class="first">One GPU per MPI rank and 7 CPUs is a good starting point
+for optimization.  Always use <code class="docutils literal notranslate"><span class="pre">-b</span></code> to bind ranks
+to cores.</p>
+</li>
+<li><p class="first">Printing out the name and full version of the source used is
+really helpful for doing retrospectives later.</p>
+<p>This code assumes you’re using git.  Hopefully that’s the
+case.  If your job-scripts live in a different area, you
+could version them too.  None of this is a substitute
+for your executable printing its own version and timing info.</p>
+</li>
+<li><p class="first">Printing as much timing output as possible allows you more
+chances to recover in case the run fails unexpectedly.</p>
+</li>
+<li><p class="first">Start scaling runs with small nnodes and check sizes, etc.
+Within a run, you should start at the highest node count
+since it should complete faster.</p>
+</li>
+</ul>
+<blockquote>
+<div><ul>
+<li><p class="first">Staging input files to the NVME is good practice.</p>
+<p>For details,
+see the <a class="reference external" href="https://docs.olcf.ornl.gov/systems/summit_user_guide.html?highlight=smpi%20args#current-nvme-usage" target="_blank">user guide</a>.</p>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>The copy script mentioned would do well to use
+the MPI rank, user-name, and jobid variables
+to copy outputs to /mnt/bb like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># the_copy_script</span>
+
+<span class="nb">set</span> -e
+<span class="nv">dir</span><span class="o">=</span>/mnt/bb/<span class="nv">$USER</span>/<span class="nv">$OMPI_COMM_WORLD_RANK</span>
+<span class="o">[</span> -d <span class="nv">$dir</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -fr <span class="nv">$dir</span>
+mkdir -p <span class="nv">$dir</span>
+<span class="nb">echo</span> <span class="s2">&quot;creating output dir </span><span class="nv">$dir</span><span class="s2"> for job </span><span class="nv">$LSB_JOBID</span><span class="s2">&quot;</span>
+cp /ccs/proj/chm101/inp.<span class="nv">$OMPI_COMM_WORLD_RANK</span>.dat <span class="nv">$dir</span>/
+</pre></div>
+</div>
+<p>This allows each rank to access a collision-free
+space from the others.</p>
+<div class="admonition-contributed-by admonition">
+<p class="first admonition-title">Contributed by</p>
+<p class="last">David M. Rogers</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../linalg/index.html" class="btn btn-neutral float-right" title="5. Linear Algebra" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="user_timing.html" class="btn btn-neutral float-left" title="4.1. User-Level Timers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

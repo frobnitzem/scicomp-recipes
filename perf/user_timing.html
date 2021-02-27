@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4.1. User-Level Timers &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4.2. Making a Scaling Plot" href="scaling.html" />
+    <link rel="prev" title="4. Performance Measurement" href="index.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">1. Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">4. Performance Measurement</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">4. </span>Performance Measurement</a> &raquo;</li>
+        
+      <li><span class="section-number">4.1. </span>User-Level Timers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/perf/user_timing.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="user-level-timers">
+<h1><span class="section-number">4.1. </span>User-Level Timers<a class="headerlink" href="#user-level-timers" title="Permalink to this headline">¶</a></h1>
+<p>Yes, there are code instrumentation strategies that give
+much more detail.  This recipe shows how to squeeze as much
+performance data from the user-level as possible – in the
+traditional <em>debug-by-printf</em> style.</p>
+<p>The inspiration for this recipe comes from the
+cool per-thread trace plots in
+<a class="reference external" href="https://bitbucket.org/icl/slate/src/master/include/slate/internal/Trace.hh" target="_blank">SLATE</a>.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// perf.hh</span>
+<span class="cp">#ifndef PERF_HH</span>
+<span class="cp">#define PERF_HH</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+
+<span class="cp">#ifdef _OPENMP</span>
+<span class="cp">#  include &lt;omp.h&gt;</span>
+<span class="cp">#else</span>
+<span class="c1">// mini-openmp compatibility layer</span>
+<span class="cp">#include</span> <span class="cpf">&lt;mpi.h&gt;</span><span class="cp"></span>
+<span class="kr">inline</span> <span class="kt">double</span> <span class="n">omp_get_wtime</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">MPI_Wtime</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">int</span> <span class="n">omp_get_max_threads</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">int</span> <span class="n">omp_get_num_threads</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">inline</span> <span class="kt">int</span> <span class="n">omp_get_thread_num</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+
+<span class="k">namespace</span> <span class="n">Performance</span> <span class="p">{</span>
+<span class="k">struct</span> <span class="nc">PerfData</span> <span class="p">{</span>
+    <span class="kt">double</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">bytes</span><span class="p">,</span> <span class="n">flops</span><span class="p">;</span>
+    <span class="n">PerfData</span><span class="p">(</span><span class="kt">double</span> <span class="n">_t0</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">_bytes</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">_flops</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">t0</span><span class="p">(</span><span class="n">_t0</span><span class="p">),</span> <span class="n">bytes</span><span class="p">(</span><span class="n">_bytes</span><span class="p">),</span> <span class="n">flops</span><span class="p">(</span><span class="n">_flops</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="nc">Timers</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">void</span> <span class="n">append</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">label</span><span class="p">,</span> <span class="n">PerfData</span> <span class="o">&amp;&amp;</span><span class="n">datum</span><span class="p">);</span>
+    <span class="k">static</span> <span class="kt">void</span> <span class="n">show</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">);</span>
+    <span class="k">static</span> <span class="kt">void</span> <span class="n">on</span><span class="p">();</span>
+    <span class="k">static</span> <span class="kt">void</span> <span class="n">off</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">class</span> <span class="nc">Timed</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">Timed</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">_label</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">bytes</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">flops</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">label</span><span class="p">(</span><span class="n">_label</span><span class="p">),</span> <span class="n">datum</span><span class="p">(</span><span class="n">omp_get_wtime</span><span class="p">(),</span>
+                                    <span class="n">bytes</span><span class="p">,</span> <span class="n">flops</span><span class="p">)</span> <span class="p">{}</span>
+        <span class="o">~</span><span class="n">Timed</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">datum</span><span class="p">.</span><span class="n">t1</span> <span class="o">=</span> <span class="n">omp_get_wtime</span><span class="p">();</span>
+            <span class="n">Timers</span><span class="o">::</span><span class="n">append</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">datum</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="k">private</span><span class="o">:</span>
+        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">label</span><span class="p">;</span>
+        <span class="n">PerfData</span> <span class="n">datum</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>Declaring a <code class="docutils literal notranslate"><span class="pre">Performance::Timed</span> <span class="pre">x()</span></code> variable inside a block of code
+has the effect of calling <code class="docutils literal notranslate"><span class="pre">omp_get_wtime()</span></code> when the object is created
+and also calling its destructor when it’s done.  The destructor
+appends the <code class="docutils literal notranslate"><span class="pre">PerfData</span></code> object to a global variable stored
+statically in <code class="docutils literal notranslate"><span class="pre">perf.cc</span></code>.</p>
+<p>Be careful to name your <code class="docutils literal notranslate"><span class="pre">Timed</span></code> variables, otherwise they’ll
+get immediately destroyed, and all the timer values
+will be on the order of microseconds.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// perf.cc</span>
+<span class="cp">#include</span> <span class="cpf">&quot;perf.hh&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;map&gt;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">Performance</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="kt">bool</span> <span class="n">tracing</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="k">static</span> <span class="kt">int</span> <span class="n">num_threads</span> <span class="o">=</span> <span class="n">omp_get_max_threads</span><span class="p">();</span>
+    <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">PerfData</span><span class="o">&gt;&gt;&gt;</span> <span class="n">events</span><span class="p">(</span><span class="n">num_threads</span><span class="p">);</span>
+
+    <span class="kt">void</span> <span class="n">Timers</span><span class="o">::</span><span class="n">append</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">label</span><span class="p">,</span> <span class="n">PerfData</span> <span class="o">&amp;&amp;</span><span class="n">datum</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">tracing</span><span class="p">)</span> <span class="k">return</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="o">&amp;</span><span class="n">self</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="n">omp_get_thread_num</span><span class="p">()];</span>
+        <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">self</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">label</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="n">self</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">PerfData</span><span class="o">&gt;</span><span class="p">();</span>
+            <span class="n">v</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">datum</span><span class="p">);</span>
+            <span class="n">self</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">datum</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Timers</span><span class="o">::</span><span class="n">on</span><span class="p">()</span> <span class="p">{</span> <span class="n">tracing</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Timers</span><span class="o">::</span><span class="n">off</span><span class="p">()</span> <span class="p">{</span> <span class="n">tracing</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">&amp;</span> <span class="n">os</span><span class="p">,</span> <span class="k">const</span> <span class="n">PerfData</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;      { &#39;Start&#39;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">t0</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
+                  <span class="o">&lt;&lt;</span> <span class="s">&quot;      , &#39;Duration&#39;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">t1</span><span class="o">-</span><span class="n">x</span><span class="p">.</span><span class="n">t0</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
+                  <span class="o">&lt;&lt;</span> <span class="s">&quot;      , &#39;Bytes&#39;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">bytes</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span>
+                  <span class="o">&lt;&lt;</span> <span class="s">&quot;      , &#39;Flops&#39;: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">x</span><span class="p">.</span><span class="n">flops</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; }&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">Timers</span><span class="o">::</span><span class="n">show</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">&amp;</span><span class="n">os</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="n">hdr1</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;[ &quot;</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="n">hdr2</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;, &quot;</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="n">hdr3</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;{ &quot;</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="n">hdr4</span><span class="p">[]</span> <span class="o">=</span> <span class="s">&quot;  , &quot;</span><span class="p">;</span>
+        <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ahdr</span> <span class="o">=</span> <span class="n">hdr1</span><span class="p">;</span>
+
+        <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="nl">self</span> <span class="p">:</span> <span class="n">events</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">ahdr</span><span class="p">;</span>
+            <span class="n">ahdr</span> <span class="o">=</span> <span class="n">hdr2</span><span class="p">;</span>
+
+            <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">bhdr</span> <span class="o">=</span> <span class="n">hdr3</span><span class="p">;</span>
+            <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="nl">et</span> <span class="p">:</span> <span class="n">self</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// all events for thread</span>
+                <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">bhdr</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;&#39;&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">et</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;&#39; : [&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+                <span class="n">bhdr</span> <span class="o">=</span> <span class="n">hdr4</span><span class="p">;</span>
+
+                <span class="k">for</span><span class="p">(</span><span class="k">auto</span> <span class="nl">ev</span> <span class="p">:</span> <span class="n">et</span><span class="p">.</span><span class="n">second</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="n">ev</span><span class="p">;</span>
+                    <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;,&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;      ]&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;  }&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="n">os</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;]&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Most of the code here is the pretty-printer, which
+outputs the event log in json-style.  The outer list
+has one element per OMP thread.</p>
+<p>The inner dictionary runs over labels, and there’s a list
+of all the individual data points for each label.</p>
+<p>By way of example, here’s an OpenMP code that
+does some time-integration to observe the butterfly effect.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// main.cc</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;perf.hh&quot;</span><span class="cp"></span>
+
+<span class="kt">double</span> <span class="nf">run</span><span class="p">(</span><span class="kt">int</span> <span class="n">N</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Lorenz attractor</span>
+    <span class="n">Performance</span><span class="o">::</span><span class="n">Timed</span> <span class="n">timer</span><span class="p">(</span><span class="s">&quot;integrate&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">14</span><span class="o">*</span><span class="n">N</span><span class="p">);</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">dt</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">;</span>
+    <span class="k">const</span> <span class="kt">double</span> <span class="n">beta</span> <span class="o">=</span> <span class="mf">8.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">;</span>
+
+    <span class="n">y</span> <span class="o">+=</span> <span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">*</span><span class="mf">1e-14</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+          <span class="kt">double</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">*</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span><span class="p">),</span>
+                 <span class="n">dy</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mf">28.0</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span>
+                 <span class="n">dz</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">-</span> <span class="n">beta</span><span class="o">*</span><span class="n">z</span><span class="p">;</span>
+          <span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+          <span class="n">y</span> <span class="o">+=</span> <span class="n">dy</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+          <span class="n">z</span> <span class="o">+=</span> <span class="n">dz</span><span class="o">*</span><span class="n">dt</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">results</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+    <span class="kt">double</span> <span class="n">sm</span><span class="p">,</span> <span class="n">lg</span><span class="p">;</span>
+    <span class="n">assert</span><span class="p">(</span><span class="n">omp_get_max_threads</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">128</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;max_threads = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">omp_get_max_threads</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">Performance</span><span class="o">::</span><span class="n">Timers</span><span class="o">::</span><span class="n">on</span><span class="p">();</span>
+    <span class="cp">#pragma omp parallel</span>
+    <span class="p">{</span> <span class="n">results</span><span class="p">[</span><span class="n">omp_get_thread_num</span><span class="p">()]</span> <span class="o">=</span> <span class="n">run</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">sm</span> <span class="o">=</span> <span class="n">lg</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="cp">#pragma omp parallel reduction(min:sm) reduction(max:lg)</span>
+    <span class="p">{</span> <span class="n">Performance</span><span class="o">::</span><span class="n">Timed</span> <span class="n">timer</span><span class="p">(</span><span class="s">&quot;Reduce&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="n">sm</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">omp_get_thread_num</span><span class="p">()];</span>
+      <span class="n">lg</span> <span class="o">=</span> <span class="n">sm</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Ending x = &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">sm</span><span class="o">+</span><span class="n">lg</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="s">&quot; +/- &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">lg</span><span class="o">-</span><span class="n">sm</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">Performance</span><span class="o">::</span><span class="n">Timers</span><span class="o">::</span><span class="n">show</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>These kinds of performance timers are useful because they incur minimal
+overhead.  Unless you are timing something that gets called
+thousands of times, you can mostly leave them in your code and forget about them.</p>
+<div class="admonition-contributed-by admonition">
+<p class="first admonition-title">Contributed by</p>
+<p class="last">David M. Rogers</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="scaling.html" class="btn btn-neutral float-right" title="4.2. Making a Scaling Plot" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="4. Performance Measurement" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

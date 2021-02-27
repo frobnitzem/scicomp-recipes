@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.2. Useful Shortcuts for Makefiles &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.3. Using cmake" href="cmake.html" />
+    <link rel="prev" title="1.1. Setting Up Your Project Environment" href="workflow.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Development Tools</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../perf/index.html">4. Performance Measurement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../perf/user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perf/scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">1. </span>Development Tools</a> &raquo;</li>
+        
+      <li><span class="section-number">1.2. </span>Useful Shortcuts for Makefiles</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/dev/make.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="useful-shortcuts-for-makefiles">
+<h1><span class="section-number">1.2. </span>Useful Shortcuts for Makefiles<a class="headerlink" href="#useful-shortcuts-for-makefiles" title="Permalink to this headline">¶</a></h1>
+<p>When starting out new projects, Makefiles
+can be faster and easier to configure than cmake.</p>
+<p>Makefiles take an opposing world-view to CMake.
+Where CMake tries to auto-detect install and configure
+options, make works best for a static build tree
+with fixed dependencies configured explicitly
+by the user.</p>
+<p>Not second-guessing, autodetecting or otherwise overriding
+the user’s environment is make’s speciality.</p>
+<p>There are many <a class="reference external" href="https://nullprogram.com/blog/2017/08/20/" target="_blank">good guides online</a>.</p>
+<div class="section" id="syntax-example">
+<h2><span class="section-number">1.2.1. </span>Syntax Example<a class="headerlink" href="#syntax-example" title="Permalink to this headline">¶</a></h2>
+<p>Here’s an example of good practices from the <a class="reference external" href="https://tools.suckless.org/quark/" target="_blank">quark project</a>:</p>
+<div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="c"># See LICENSE file for copyright and license details</span>
+<span class="c"># quark - simple web server</span>
+<span class="nf">.POSIX</span><span class="o">:</span>
+
+<span class="cp">include config.mk</span>
+
+<span class="nv">COMPONENTS</span> <span class="o">=</span> data http sock util
+
+<span class="nf">all</span><span class="o">:</span> <span class="n">quark</span>
+
+<span class="nf">data.o</span><span class="o">:</span> <span class="n">data</span>.<span class="n">c</span> <span class="n">data</span>.<span class="n">h</span> <span class="n">http</span>.<span class="n">h</span> <span class="n">util</span>.<span class="n">h</span> <span class="n">config</span>.<span class="n">mk</span>
+<span class="nf">http.o</span><span class="o">:</span> <span class="n">http</span>.<span class="n">c</span> <span class="n">config</span>.<span class="n">h</span> <span class="n">http</span>.<span class="n">h</span> <span class="n">util</span>.<span class="n">h</span> <span class="n">config</span>.<span class="n">mk</span>
+<span class="nf">main.o</span><span class="o">:</span> <span class="n">main</span>.<span class="n">c</span> <span class="n">arg</span>.<span class="n">h</span> <span class="n">data</span>.<span class="n">h</span> <span class="n">http</span>.<span class="n">h</span> <span class="n">sock</span>.<span class="n">h</span> <span class="n">util</span>.<span class="n">h</span> <span class="n">config</span>.<span class="n">mk</span>
+<span class="nf">sock.o</span><span class="o">:</span> <span class="n">sock</span>.<span class="n">c</span> <span class="n">sock</span>.<span class="n">h</span> <span class="n">util</span>.<span class="n">h</span> <span class="n">config</span>.<span class="n">mk</span>
+<span class="nf">util.o</span><span class="o">:</span> <span class="n">util</span>.<span class="n">c</span> <span class="n">util</span>.<span class="n">h</span> <span class="n">config</span>.<span class="n">mk</span>
+
+<span class="nf">quark</span><span class="o">:</span> <span class="n">config</span>.<span class="n">h</span> <span class="k">$(</span><span class="nv">COMPONENTS</span>:=<span class="nv">.o</span><span class="k">)</span> <span class="k">$(</span><span class="nv">COMPONENTS</span>:=<span class="nv">.h</span><span class="k">)</span> <span class="n">main</span>.<span class="n">o</span> <span class="n">config</span>.<span class="n">mk</span>
+        <span class="k">$(</span>CC<span class="k">)</span> -o <span class="nv">$@</span> <span class="k">$(</span>CPPFLAGS<span class="k">)</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> <span class="k">$(</span>COMPONENTS:<span class="o">=</span>.o<span class="k">)</span> main.o <span class="k">$(</span>LDFLAGS<span class="k">)</span>
+
+<span class="nf">config.h</span><span class="o">:</span>
+        cp config.def.h <span class="nv">$@</span>
+
+<span class="nf">clean</span><span class="o">:</span>
+        rm -f quark main.o <span class="k">$(</span>COMPONENTS:<span class="o">=</span>.o<span class="k">)</span>
+
+<span class="nf">dist</span><span class="o">:</span>
+        rm -rf <span class="s2">&quot;quark-</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="s2">&quot;</span>
+        mkdir -p <span class="s2">&quot;quark-</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="s2">&quot;</span>
+        cp -R LICENSE Makefile arg.h config.def.h config.mk quark.1 <span class="se">\</span>
+                <span class="k">$(</span>COMPONENTS:<span class="o">=</span>.c<span class="k">)</span> <span class="k">$(</span>COMPONENTS:<span class="o">=</span>.h<span class="k">)</span> main.c <span class="s2">&quot;quark-</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="s2">&quot;</span>
+        tar -cf - <span class="s2">&quot;quark-</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="s2">&quot;</span> <span class="p">|</span> gzip -c &gt; <span class="s2">&quot;quark-</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="s2">.tar.gz&quot;</span>
+        rm -rf <span class="s2">&quot;quark-</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="s2">&quot;</span>
+
+<span class="nf">install</span><span class="o">:</span> <span class="n">all</span>
+        mkdir -p <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>PREFIX<span class="k">)</span><span class="s2">/bin&quot;</span>
+        cp -f quark <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>PREFIX<span class="k">)</span><span class="s2">/bin&quot;</span>
+        chmod <span class="m">755</span> <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>PREFIX<span class="k">)</span><span class="s2">/bin/quark&quot;</span>
+        mkdir -p <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>MANPREFIX<span class="k">)</span><span class="s2">/man1&quot;</span>
+        cp quark.1 <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>MANPREFIX<span class="k">)</span><span class="s2">/man1/quark.1&quot;</span>
+        chmod <span class="m">644</span> <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>MANPREFIX<span class="k">)</span><span class="s2">/man1/quark.1&quot;</span>
+
+<span class="nf">uninstall</span><span class="o">:</span>
+        rm -f <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>PREFIX<span class="k">)</span><span class="s2">/bin/quark&quot;</span>
+        rm -f <span class="s2">&quot;</span><span class="k">$(</span>DESTDIR<span class="k">)$(</span>MANPREFIX<span class="k">)</span><span class="s2">/man1/quark.1&quot;</span>
+</pre></div>
+</div>
+<p>Notice that explicit dependencies ensure the project
+is properly rebuilt when relevant files are edited.</p>
+<p>Also, special make substituions are used:
+* <code class="docutils literal notranslate"><span class="pre">$&#64;</span></code> = the name of the rule’s target (e.g. the <code class="docutils literal notranslate"><span class="pre">config.h</span></code> rule)
+* <code class="docutils literal notranslate"><span class="pre">$^</span></code> = all dependencies of the rule
+* <code class="docutils literal notranslate"><span class="pre">$(VAR:a=b)</span></code> = substitute trailing <code class="docutils literal notranslate"><span class="pre">a</span></code> with <code class="docutils literal notranslate"><span class="pre">b</span></code> in each word.</p>
+</div>
+<div class="section" id="general-rules">
+<h2><span class="section-number">1.2.2. </span>General Rules<a class="headerlink" href="#general-rules" title="Permalink to this headline">¶</a></h2>
+<p>The example above doesn’t specifically say how to
+compile <code class="docutils literal notranslate"><span class="pre">.c</span></code> files to <code class="docutils literal notranslate"><span class="pre">.o</span></code> files.  Instead,
+it relies on the default rule.</p>
+<p>We reproduce this below, along with some other useful
+ones for modern software:</p>
+<div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="nf">.SUFFIXES</span><span class="o">:</span> <span class="n">c</span> <span class="n">cx</span> <span class="n">f</span> <span class="n">cu</span>
+
+<span class="nf">.c.o</span><span class="o">:</span>
+        <span class="k">$(</span>CC<span class="k">)</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> -c $&lt;
+
+<span class="nf">.f.o</span><span class="o">:</span>
+        <span class="k">$(</span>FC<span class="k">)</span> <span class="k">$(</span>FFLAGS<span class="k">)</span> -c $&lt;
+
+<span class="nf">.cc.o</span><span class="o">:</span>
+        <span class="k">$(</span>CXX<span class="k">)</span> <span class="k">$(</span>CXXFLAGS<span class="k">)</span> -c $&lt;
+
+<span class="nf">.cu.o</span><span class="o">:</span>
+        <span class="k">$(</span>NVCC<span class="k">)</span> <span class="k">$(</span>NVCCFLAGS<span class="k">)</span> -c $&lt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="external-packages">
+<h2><span class="section-number">1.2.3. </span>External Packages<a class="headerlink" href="#external-packages" title="Permalink to this headline">¶</a></h2>
+<p>The quark example above uses a small, separate <code class="docutils literal notranslate"><span class="pre">config.mk</span></code> file
+to let the user point the build at all system dependencies:</p>
+<div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="c"># quark version</span>
+<span class="nv">VERSION</span> <span class="o">=</span> <span class="m">0</span>
+
+<span class="c"># Customize below to fit your system</span>
+
+<span class="c"># paths</span>
+<span class="nv">PREFIX</span> <span class="o">=</span> /usr/local
+<span class="nv">MANPREFIX</span> <span class="o">=</span> <span class="k">$(</span>PREFIX<span class="k">)</span>/share/man
+
+<span class="c"># flags</span>
+<span class="nv">CPPFLAGS</span> <span class="o">=</span> -DVERSION<span class="o">=</span><span class="se">\&quot;</span><span class="k">$(</span>VERSION<span class="k">)</span><span class="se">\&quot;</span> -D_DEFAULT_SOURCE -D_XOPEN_SOURCE<span class="o">=</span><span class="m">700</span> -D_BSD_SOURCE
+<span class="nv">CFLAGS</span>   <span class="o">=</span> -std<span class="o">=</span>c99 -pedantic -Wall -Wextra -Os
+<span class="nv">LDFLAGS</span>  <span class="o">=</span> -s
+
+<span class="c"># compiler and linker</span>
+<span class="nv">CC</span> <span class="o">=</span> cc
+</pre></div>
+</div>
+<p>GNU Make defines the <a class="reference external" href="https://www.gnu.org/software/make/manual/html_node/Shell-Function.html#Shell-Function" target="_blank">shell function</a>.
+This can be helpful for adding limited auto-detection to <code class="docutils literal notranslate"><span class="pre">config.mk</span></code>.
+For example, <code class="docutils literal notranslate"><span class="pre">$(shell</span> <span class="pre">pkg-config</span> <span class="pre">--libs</span> <span class="pre">zlib)</span></code>.</p>
+</div>
+<div class="section" id="interesting-tricks">
+<h2><span class="section-number">1.2.4. </span>Interesting Tricks<a class="headerlink" href="#interesting-tricks" title="Permalink to this headline">¶</a></h2>
+<p>GCC can create Makefiles listing user header files with <code class="docutils literal notranslate"><span class="pre">-MMD</span></code>.
+The way to use this is <a class="reference external" href="https://stackoverflow.com/questions/11855386/using-g-with-mmd-in-makefile-to-automatically-generate-dependencies" target="_blank">like this</a>:</p>
+<div class="highlight-make notranslate"><div class="highlight"><pre><span></span><span class="nv">CXX</span> <span class="o">=</span> g++
+<span class="nv">CXXFLAGS</span> <span class="o">=</span> -g -Wall -MMD      <span class="c1"># The MMD flag causes x.d, etc. to be output</span>
+<span class="nv">OBJECTS</span> <span class="o">=</span> x.o y.o z.o         <span class="c1"># object files forming executable</span>
+<span class="nv">DEPENDS</span> <span class="o">=</span> <span class="si">${</span><span class="nv">OBJECTS</span><span class="p">:.o=.d</span><span class="si">}</span>    <span class="c1"># substitutes &quot;.o&quot; with &quot;.d&quot;</span>
+<span class="nv">EXEC</span> <span class="o">=</span> a.out                  <span class="c1"># executable name</span>
+
+<span class="nf">${EXEC} </span><span class="o">:</span> ${<span class="n">OBJECTS</span>}          <span class="c"># link step</span>
+    <span class="si">${</span><span class="nv">CXX</span><span class="si">}</span> <span class="si">${</span><span class="nv">OBJECTS</span><span class="si">}</span> -o <span class="si">${</span><span class="nv">EXEC</span><span class="si">}</span>
+
+<span class="cp">-include ${DEPENDS}           # include x.d, y.d, and z.d</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">-</span></code> prefix on include prevents an error from being thrown
+if the include command fails.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cmake.html" class="btn btn-neutral float-right" title="1.3. Using cmake" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="workflow.html" class="btn btn-neutral float-left" title="1.1. Setting Up Your Project Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

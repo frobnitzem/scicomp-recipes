@@ -1,0 +1,445 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>1.1. Setting Up Your Project Environment &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1.2. Useful Shortcuts for Makefiles" href="make.html" />
+    <link rel="prev" title="1. Development Tools" href="index.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">1. Development Tools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../perf/index.html">4. Performance Measurement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../perf/user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perf/scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">1. </span>Development Tools</a> &raquo;</li>
+        
+      <li><span class="section-number">1.1. </span>Setting Up Your Project Environment</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/dev/workflow.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setting-up-your-project-environment">
+<h1><span class="section-number">1.1. </span>Setting Up Your Project Environment<a class="headerlink" href="#setting-up-your-project-environment" title="Permalink to this headline">¶</a></h1>
+<p>Let’s say you’re just getting started on project id CHM101.
+A standard workflow on Summit is to build and install project
+sources to <code class="docutils literal notranslate"><span class="pre">/ccs/proj/CHM101</span></code>, stage input/output files to
+<code class="docutils literal notranslate"><span class="pre">/gpfs/alpine/proj-shared/CHM101</span></code>,
+and use <code class="docutils literal notranslate"><span class="pre">/gpfs/alpine/scratch/$USER/CHM101</span></code>
+during a run.</p>
+<p>You should also strongly consider
+having each MPI rank do all file-per-process I/O
+to <code class="docutils literal notranslate"><span class="pre">/mnt/bb/$USER</span></code>, as described in
+<a class="reference external" href="https://docs.olcf.ornl.gov/systems/summit_user_guide.html#current-nvme-usage" target="_blank">Using the NVME</a>.</p>
+<div class="section" id="installing-software">
+<h2><span class="section-number">1.1.1. </span>Installing Software<a class="headerlink" href="#installing-software" title="Permalink to this headline">¶</a></h2>
+<p>Here’s the process of querying system information and installing
+cp2k - a quantum chemistry package with lots of dependencies.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /ccs/proj/CHM101
+git clone --depth <span class="m">1</span> --recurse-submodules https://github.com/cp2k/cp2k.git cp2k
+</pre></div>
+</div>
+<p>Going through the dependency list in the INSTALL instructions, <cite>make</cite> is there, but
+<cite>python</cite>-3 comes from a module.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module avail python
+</pre></div>
+</div>
+<p>It’s good practice to collect these into a standard environment.
+We’ll end up with the following,</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># /ccs/proj/CHM101/cp2k-env.sh</span>
+<span class="c1"># to use this, run &quot;source /ccs/proj/CHM101/cp2k-env.sh&quot;</span>
+
+module load cmake
+module load gcc
+module load python/3
+module load spectrum-mpi
+module load cuda
+module load hdf5
+module load openblas
+module load netlib-scalapack <span class="c1"># includes blas, CPU only</span>
+<span class="c1"># non-threaded BLAS is preferred (TODO)</span>
+module load fftw/3
+module load gsl
+</pre></div>
+</div>
+<p>CP2K provides a toolchain to compiler its other dependencies,</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cd cp2k/tools/toolchain
+./install_cp2k_toolchain.sh --help
+
+-j &lt;n&gt;                    Number of processors to use
+
+             On Summit, you can compile on the head node,
+             but stick to less than 4 or 8 processors
+             to be kind to other users.
+
+--mpi-mode=openmpi
+
+             Summit is an IBM system, and uses spectrum-mpi
+             as provided by a module.  It is based on openmpi 4.0.1,
+             and supports the MPI 3.2 standard.
+             (https://www.ibm.com/support/knowledgecenter/SSZTET_10.3/smpi_overview.html).
+             Spectrum updates are deployed every 6 months or so.
+             Upgrades and downtimes are announced weeks in advanced,
+             and put on the facility calendar.
+             Old modules become deprecated (but still available).
+             Keep track of your build process, because you will probably
+             want to re-build on these updates.
+
+--math-mode=openblas
+
+             IBM has ESSL as a BLAS library, but it doesn&#39;t include
+             all the lapack functions.  We also provide a netlib-scalapack
+             library that includes lapack/blas, as well as a separate openblas
+             library.
+
+--enable-cuda=yes         You should definitely use GPUs when on Summit.
+--gpu-ver=V100
+
+             Summit&#39;s hardware is documented at
+             https://docs.olcf.ornl.gov/systems/summit_user_guide.html#system-overview
+             The V100 GPUs have compute capability 70, so the usual flag
+             passed to nvcc is --gpu_arch=sm_70.
+
+--enable-cray=no          Summit&#39;s vendor is IBM, not Cray.
+
+             Package choices, below, are mostly informed by available
+             modules and/or the difficulty of building those libraries
+             manually.  Work incrementally if possible.
+
+             Usually, you can get important public, core libraries turned
+             into modules by emailing the help desk at help@olcf.ornl.gov.
+             But be sure you have tried them first and it&#39;s what you really want
+             (so you have a complete request to email).
+
+--with-gcc=system         Provided by gcc module
+
+--with-cmake=system       Provided by cmake module
+
+--with-openmpi=system     Provided by spectrum-mpi module
+
+--with-fftw=system        Provided by the fftw/3 module
+
+--with-reflapack=no
+--with-acml=no
+--with-mkl=no
+--with-cosma=no           Replaces scalapack, we&#39;ll try keeping scalapack first.
+
+--with-openblas=system    Provided by the openblas module (CPU only).
+--with-scalapack=system   Provided by the netlib-scalapack module (CPU only).
+
+--with-elpa=no            ELPA works using GPU on Summit, but this
+                          automated build isn&#39;t working. [I tried]
+
+--with-ptscotch=no        No module is available, can revisit if PEXSI is needed.
+--with-superlu=no         not using PEXSI right away.
+--with-pexsi=no
+
+--with-gsl=system         provided by the gsl module
+--with-hdf5=system        provided by hdf5 module
+
+             Ask the tool to install all of the following chemistry-specific
+             libraries locally:
+
+--with-libxc=install      The tool will install.
+--with-libint=install
+--with-spglib=install
+--with-sirius=no          Trial and error - not currently building.
+--with-spfft=install
+--with-libvdwxc=install
+--with-libsmm=install
+--with-libxsmm=no         x86_x64 is different than IBM&#39;s PPC (ppc64le)
+--with-libvori=no
+</pre></div>
+</div>
+<p>To use maximum available parallelism, I compiled using an interactive
+session on a node,</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bsub -P CHM101 -nnodes <span class="m">1</span> -q debug -W <span class="m">30</span> -Is <span class="nv">$SHELL</span>
+</pre></div>
+</div>
+<p>After running <cite>install_cp2k_toolchain.sh</cite> with the options above,
+it provides further instructions.  The compile fails (with
+a bash syntax error) at some point because of
+a missing environment variable, but
+it’s easy to fix the <cite>scripts/stage1/install_openmpi.sh</cite>
+so that the mpi3 path is taken.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Now copy:
+ cp /ccs/proj/CHM101/cp2k/tools/toolchain/install/arch/* to the cp2k/arch/ directory
+To use the installed tools and libraries and cp2k version
+compiled with it you will first need to execute at the prompt:
+  <span class="nb">source</span> /ccs/proj/CHM101/cp2k/tools/toolchain/install/setup
+To build CP2K you should change directory:
+  <span class="nb">cd</span> cp2k/
+  make -j <span class="m">128</span> <span class="nv">ARCH</span><span class="o">=</span><span class="nb">local</span> <span class="nv">VERSION</span><span class="o">=</span><span class="s2">&quot;ssmp sdbg psmp pdbg&quot;</span>
+
+arch files <span class="k">for</span> GPU enabled CUDA versions are named <span class="s2">&quot;local_cuda.*&quot;</span>
+arch files <span class="k">for</span> valgrind versions are named <span class="s2">&quot;local_valgrind.*&quot;</span>
+arch files <span class="k">for</span> coverage versions are named <span class="s2">&quot;local_coverage.*&quot;</span>
+</pre></div>
+</div>
+<p>I added the extra <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">...</span></code> line to <code class="docutils literal notranslate"><span class="pre">/ccs/proj/CHM101/cp2k-env.sh</span></code>,
+and then compiled.
+Apparently, the fortran sanitizer is not available on our system (at least with gcc 6.4.0).
+CP2K makes it easy to fiddle with compile flags by editing the <code class="docutils literal notranslate"><span class="pre">arch/local*</span></code> files though,
+so you can manually remove <code class="docutils literal notranslate"><span class="pre">-fsanitize=leak</span></code> from the <code class="docutils literal notranslate"><span class="pre">arch/local*</span></code> files.</p>
+<p>That’s not necessary in this case, since the main executable you want to build is:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make -j <span class="m">4</span> <span class="nv">ARCH</span><span class="o">=</span>local_cuda <span class="nv">VERSION</span><span class="o">=</span>psmp
+</pre></div>
+</div>
+<p>You can check that this binary “should” be GPU-enabled by running <code class="docutils literal notranslate"><span class="pre">ldd</span> <span class="pre">exe/local_cuda/cp2k.psmp</span></code>.
+This shows several NVIDIA libraries, so at least we know some function calls to those libraries
+exist.  You should always check your code’s performance and correctness to be sure.</p>
+</div>
+<div class="section" id="todo">
+<h2><span class="section-number">1.1.2. </span>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<p>Complete this example with:</p>
+<blockquote>
+<div><ul class="simple">
+<li>an lsf script, explain what the launch node is</li>
+<li>I/O paths (write to /gpfs), expected IO throughput
+~ 10 Mb/s in file-per-process mode, expect latency</li>
+<li>saving software version and parameters in output</li>
+<li>collecting profiling / timing data</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="make.html" class="btn btn-neutral float-right" title="1.2. Useful Shortcuts for Makefiles" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="1. Development Tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

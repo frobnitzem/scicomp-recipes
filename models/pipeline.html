@@ -1,0 +1,396 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2.5. Assembly Line &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="3. Communication Patterns" href="../comms/index.html" />
+    <link rel="prev" title="2.4. OpenMP and OpenACC" href="openmp.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../dev/index.html">1. Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../dev/git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">2. HPC Programming Models</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../perf/index.html">4. Performance Measurement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../perf/user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../perf/scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">2. </span>HPC Programming Models</a> &raquo;</li>
+        
+      <li><span class="section-number">2.5. </span>Assembly Line</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/models/pipeline.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="assembly-line">
+<h1><span class="section-number">2.5. </span>Assembly Line<a class="headerlink" href="#assembly-line" title="Permalink to this headline">¶</a></h1>
+<p>The practice of forming an assembly line dates back at least to the
+ancient Romans.  In computational work, you sometimes
+want to get each CPU and GPU to perform the same task on
+different work items – handing them off to the next worker
+after each is done.</p>
+<img alt="A1A2A1 in parallel with B1B2B1 pipeline" class="align-center" src="../_images/pipeline.svg" /><p>CUDA accomplishes this with its <code class="docutils literal notranslate"><span class="pre">streams</span></code> API,
+while a fully-CPU implementation would use locks
+to wait on <code class="docutils literal notranslate"><span class="pre">ready</span></code> events.</p>
+<p>Both methods are combined in the <code class="docutils literal notranslate"><span class="pre">Event</span></code> class below:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp"></span>
+
+<span class="c1">//#define ENABLE_CUDA</span>
+
+<span class="cp">#ifdef ENABLE_CUDA</span>
+<span class="cp">#include</span> <span class="cpf">&lt;cuda_runtime.h&gt;</span><span class="cp"></span>
+<span class="cp">#define CHECKCUDA(cmd) do {                         \</span>
+<span class="cp">  cudaError_t e = cmd;                              \</span>
+<span class="cp">  if( e != cudaSuccess ) {                          \</span>
+<span class="cp">    printf(&quot;Failed: Cuda error %s:%d &#39;%s&#39;\n&quot;,       \</span>
+<span class="cp">        __FILE__,__LINE__,cudaGetErrorString(e));   \</span>
+<span class="cp">    exit(EXIT_FAILURE);                             \</span>
+<span class="cp">  }                                                 \</span>
+<span class="cp">} while(0)</span>
+<span class="cp">#else</span>
+<span class="c1">// skip CUDA commands in non-CUDA mode</span>
+<span class="cp">#define CHECKCUDA(cmd)</span>
+<span class="k">typedef</span> <span class="kt">void</span><span class="o">*</span> <span class="n">cudaEvent_t</span><span class="p">;</span>
+<span class="k">typedef</span> <span class="kt">void</span><span class="o">*</span> <span class="n">cudaStream_t</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="k">struct</span> <span class="nc">Event</span> <span class="p">{</span>
+    <span class="n">Event</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaEventCreateWithFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">,</span> <span class="n">cudaEventDisableTiming</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">sync</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="n">Event</span><span class="p">(</span><span class="k">const</span> <span class="n">Event</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+    <span class="n">Event</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Event</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+
+    <span class="o">~</span><span class="n">Event</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaEventDestroy</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">record</span><span class="p">(</span><span class="n">cudaStream_t</span> <span class="n">stream</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaEventRecord</span><span class="p">(</span><span class="n">ev</span><span class="p">,</span> <span class="n">stream</span><span class="p">)</span> <span class="p">);</span>
+        <span class="n">sync</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">wait</span><span class="p">(</span><span class="n">cudaStream_t</span> <span class="n">stream</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">sync</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span> <span class="c1">// will not succeed until record call has completed</span>
+        <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaEventSynchronize</span><span class="p">(</span><span class="n">ev</span><span class="p">)</span> <span class="p">);</span>
+        <span class="c1">//CHECKCUDA( cudaStreamWaitEvent(stream, ev, 0) );</span>
+        <span class="c1">// leave in the locked state so that another record() is needed.</span>
+    <span class="p">}</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">mutex</span> <span class="n">sync</span><span class="p">;</span>
+    <span class="n">cudaEvent_t</span> <span class="n">ev</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// do work</span>
+<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="n">cudaStream_t</span> <span class="n">stream</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">name</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">time</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//CHECKCUDA( cudaStreamSynchronize(stream) );</span>
+    <span class="n">usleep</span><span class="p">(</span><span class="n">time</span><span class="o">*</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//  do some work on stream A</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s item %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="n">cudaStream_t</span> <span class="n">sA</span><span class="p">,</span> <span class="n">sB</span><span class="p">;</span>
+    <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaStreamCreateWithFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sA</span><span class="p">,</span> <span class="n">cudaStreamNonBlocking</span><span class="p">)</span> <span class="p">);</span>
+    <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaStreamCreateWithFlags</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sB</span><span class="p">,</span> <span class="n">cudaStreamNonBlocking</span><span class="p">)</span> <span class="p">);</span>
+
+    <span class="n">Event</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// Events, named after recording process.</span>
+
+    <span class="cp">#pragma omp parallel num_threads(2)</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="kr">thread</span>  <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
+        <span class="kt">int</span> <span class="n">threads</span> <span class="o">=</span> <span class="n">omp_get_num_threads</span><span class="p">();</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;thread %d/%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="kr">thread</span><span class="p">,</span> <span class="n">threads</span><span class="p">);</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span><span class="p">(</span><span class="n">threads</span> <span class="o">!=</span> <span class="mi">2</span> <span class="o">||</span> <span class="kr">thread</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// A</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">2</span><span class="p">].</span><span class="n">wait</span><span class="p">(</span><span class="n">sA</span><span class="p">);</span> <span class="c1">// wait for resources returned from B2</span>
+                <span class="n">work</span><span class="p">(</span><span class="n">sA</span><span class="p">,</span> <span class="s">&quot;A&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">2</span><span class="p">].</span><span class="n">record</span><span class="p">(</span><span class="n">sA</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span><span class="p">(</span><span class="n">threads</span> <span class="o">!=</span> <span class="mi">2</span> <span class="o">||</span> <span class="kr">thread</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// B</span>
+                <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">2</span><span class="p">].</span><span class="n">wait</span><span class="p">(</span><span class="n">sB</span><span class="p">);</span>
+                <span class="n">work</span><span class="p">(</span><span class="n">sB</span><span class="p">,</span> <span class="s">&quot;B&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">300</span><span class="p">);</span>
+                <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">%</span><span class="mi">2</span><span class="p">].</span><span class="n">record</span><span class="p">(</span><span class="n">sB</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaStreamDestroy</span><span class="p">(</span><span class="n">sB</span><span class="p">)</span> <span class="p">);</span>
+    <span class="n">CHECKCUDA</span><span class="p">(</span> <span class="n">cudaStreamDestroy</span><span class="p">(</span><span class="n">sA</span><span class="p">)</span> <span class="p">);</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Worker <code class="docutils literal notranslate"><span class="pre">A</span></code> works on item <code class="docutils literal notranslate"><span class="pre">A1</span></code>, then signals (records)
+<code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">A1</span></code> and moves on to <code class="docutils literal notranslate"><span class="pre">A2</span></code>.
+Worker <code class="docutils literal notranslate"><span class="pre">B</span></code> waits for <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">A1</span></code>, processes it into item <code class="docutils literal notranslate"><span class="pre">B1</span></code>,
+then signales (records) <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">B1</span></code>.
+Eventually worker <code class="docutils literal notranslate"><span class="pre">A</span></code> completes <code class="docutils literal notranslate"><span class="pre">A2</span></code>, and moves onto <code class="docutils literal notranslate"><span class="pre">A3</span></code>.
+Here, however, it can just re-use resources from <code class="docutils literal notranslate"><span class="pre">A1</span></code>,
+as long as it first waits for <code class="docutils literal notranslate"><span class="pre">Event</span> <span class="pre">B2</span></code>.</p>
+<p>In actual application code, workers <code class="docutils literal notranslate"><span class="pre">A</span></code> and <code class="docutils literal notranslate"><span class="pre">B</span></code> communicate
+via a circular buffer, reading or writing <code class="docutils literal notranslate"><span class="pre">buf[i%2]</span></code> at step i.
+This strategy is known as double-buffering.
+Note also how the code above actually works even when only
+one thread is available.  This regrettable situation might
+occur if the code is compiled without openmp or run incorrectly
+because the user has requested only 1 thread.</p>
+<p>There’s a quirk with CUDA events, where they don’t register
+until recorded.  We get around this by requiring a wait on
+a CPU-lock so that <code class="docutils literal notranslate"><span class="pre">cudaEventSynchronize</span></code> can’t get called
+until after the <code class="docutils literal notranslate"><span class="pre">cudaEventRecord</span></code> has been called.
+This CPU-lock has the side-effect of creating all the necessary
+synchronization for a CPU-only implementation.</p>
+<p>Unfortunately, <code class="docutils literal notranslate"><span class="pre">cudaStreamWaitEvent</span></code> can’t be called when
+waiting for the event, since it doesn’t block the CPU.
+This would make both GPU-only and mixed CPU/GPU implementations
+incorrect.  For GPU-only implementations, subsequent events
+would get recorded too early.
+The mixed CPU/GPU implementation would get into trouble when
+waiting starting a CPU operation that required prior GPU
+events to have completed.</p>
+<p>The trade-off is a few milliseconds of kernel launch latency
+as well as synchronization latency from cudaStreamWaitEvent itself.
+It’s possible to eek out more performance by using
+a vector of events (getting around the “too early recording”
+problem) and uncommenting the <code class="docutils literal notranslate"><span class="pre">cudaStreamSynchronize</span></code>
+call for every CPU function.</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../comms/index.html" class="btn btn-neutral float-right" title="3. Communication Patterns" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="openmp.html" class="btn btn-neutral float-left" title="2.4. OpenMP and OpenACC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>

@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>7. Resources &mdash; OLCF Cookbook  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/js/custom.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="How to contribute to this book" href="contributing/index.html" />
+    <link rel="prev" title="6.1. Running Vasp 6 on OLCF" href="apps/VASP6.html" />
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> OLCF Cookbook
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="dev/index.html">1. Development Tools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/cmake.html">1.3. Using cmake</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/spack.html">1.4. Compiling Using Spack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/git_submodules.html">1.5. Git Submodules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models/index.html">2. HPC Programming Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/multi_impl.html">2.1. Multiple Implementations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/cuda.html">2.2. CUDA Programming Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/kokkos.html">2.3. Simple Kokkos Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/openmp.html">2.4. OpenMP and OpenACC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/pipeline.html">2.5. Assembly Line</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="comms/index.html">3. Communication Patterns</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="comms/nccl_allreduce.html">3.1. NCCL Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="perf/index.html">4. Performance Measurement</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="perf/user_timing.html">4.1. User-Level Timers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perf/scaling.html">4.2. Making a Scaling Plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="linalg/index.html">5. Linear Algebra</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="linalg/slate.html">5.1. SLATE Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apps/index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing/index.html">How to contribute to this book</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing/index.html#submitting-suggestions">Submitting suggestions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing/index.html#authoring-content">Authoring content</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing/index.html#github-guidelines">GitHub Guidelines</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">OLCF Cookbook</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content style-external-links">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li><span class="section-number">7. </span>Resources</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/references.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="resources">
+<h1><span class="section-number">7. </span>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>AlgoWiki Project <a class="reference external" href="https://algowiki-project.org/en" target="_blank">https://algowiki-project.org/en</a></li>
+<li>Designing and Building Parallel Programs <a class="reference external" href="https://www.mcs.anl.gov/~itf/dbpp/text/book.html" target="_blank">https://www.mcs.anl.gov/~itf/dbpp/text/book.html</a></li>
+<li>Descriptions of Parallel Algorithms <a class="reference external" href="http://www.cs.cmu.edu/~scandal/nesl/algorithms.html" target="_blank">http://www.cs.cmu.edu/~scandal/nesl/algorithms.html</a></li>
+<li>The DevOps Handbook www.oreilly.com/library/view/the-devops-handbook.9781457191381</li>
+</ul>
+</div>
+<div class="section" id="libraries">
+<h1><span class="section-number">8. </span>Libraries<a class="headerlink" href="#libraries" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>MFEM Finite Element Method <a class="reference external" href="https://mfem.org" target="_blank">https://mfem.org</a></li>
+<li>Sundials <a class="reference external" href="https://computing.llnl.gov/projects/sundials/sundials-software" target="_blank">https://computing.llnl.gov/projects/sundials/sundials-software</a></li>
+<li>AMP (Advanced Multiphysics) <a class="reference external" href="https://rsicc.ornl.gov/codes/ccc/ccc7/ccc-793.html" target="_blank">https://rsicc.ornl.gov/codes/ccc/ccc7/ccc-793.html</a></li>
+<li>HyPRE (Multigrid Solvers) <a class="reference external" href="https://computing.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods" target="_blank">https://computing.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods</a></li>
+<li>High-Performance Geometric Multigrid <a class="reference external" href="https://hpgmg.org" target="_blank">https://hpgmg.org</a></li>
+</ul>
+</div>
+<div class="section" id="benchmark-code-examples">
+<h1><span class="section-number">9. </span>Benchmark Code Examples<a class="headerlink" href="#benchmark-code-examples" title="Permalink to this headline">¶</a></h1>
+<p>These code-bases provide references for current practices in
+HPC software design.  Note that HPC simulation codes are
+continually trying out new design ideas as they evolve in time.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://asc.llnl.gov/coral-2-benchmarks" target="_blank">https://asc.llnl.gov/coral-2-benchmarks</a></li>
+<li><a class="reference external" href="https://www.lanl.gov/projects/crossroads/benchmarks-performance-analysis.php" target="_blank">https://www.lanl.gov/projects/crossroads/benchmarks-performance-analysis.php</a></li>
+<li><a class="reference external" href="https://proxyapps.exascaleproject.org" target="_blank">https://proxyapps.exascaleproject.org</a></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contributing/index.html" class="btn btn-neutral float-right" title="How to contribute to this book" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="apps/VASP6.html" class="btn btn-neutral float-left" title="6.1. Running Vasp 6 on OLCF" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2021, OLCF
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+    
+
+
+
+</body>
+</html>
