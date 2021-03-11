@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Task-Parallel Runtime Scheduling &mdash; OLCF Cookbook  documentation</title>
+  <title>6. Task-Parallel Runtime Scheduling &mdash; OLCF Cookbook  documentation</title>
   
 
   
@@ -39,6 +39,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="7. Applications" href="../apps/index.html" />
+    <link rel="prev" title="5.1. SLATE Example" href="../linalg/slate.html" />
 
 </head>
 
@@ -84,7 +86,7 @@
               
             
             
-              <ul>
+              <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../dev/index.html">1. Development Tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
@@ -114,13 +116,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">6. Applications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">6.1. Running Vasp 6 on OLCF</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Task-Parallel Runtime Scheduling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">7. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../apps/CP2K.html">7.1. Running CP2K on Summit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../apps/VASP6.html">7.2. Running Vasp 6 on OLCF</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">8. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">9. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">10. Benchmark Code Examples</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
@@ -175,7 +179,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Task-Parallel Runtime Scheduling</li>
+      <li><span class="section-number">6. </span>Task-Parallel Runtime Scheduling</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -195,11 +199,10 @@
            <div itemprop="articleBody">
             
   <div class="section" id="task-parallel-runtime-scheduling">
-<h1>Task-Parallel Runtime Scheduling<a class="headerlink" href="#task-parallel-runtime-scheduling" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">6. </span>Task-Parallel Runtime Scheduling<a class="headerlink" href="#task-parallel-runtime-scheduling" title="Permalink to this headline">¶</a></h1>
 <p>To review:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://code.ornl.gov/99R/pmake" target="_blank">pmake</a></li>
-<li>Signac</li>
 <li>Plasma example</li>
 </ul>
 </div>
@@ -209,6 +212,15 @@
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../apps/index.html" class="btn btn-neutral float-right" title="7. Applications" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../linalg/slate.html" class="btn btn-neutral float-left" title="5.1. SLATE Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

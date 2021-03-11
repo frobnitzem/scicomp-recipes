@@ -3,16 +3,6 @@
 A Cookbook for Scientific Computing
 ==================================================================
 
-.. epigraph::
-
-  | Pour a 28 oz. can of peeled tomatoes into a medium
-  | pot.  Add salt to taste.  Bring it to a simmer, uncovered.
-  | Add 5 oz. butter.  Peel and cut an onion in half.
-  | Add it to the pot.  Continue to simmer 45 minutes.
-  | Remove the onion.
-
-    -- Marcella Hazan’s Tomato Sauce
-
 Sometimes you have all the ingredients, and you
 just need some good advice on how to combine them
 to make something great.
@@ -30,6 +20,7 @@ and improving applications here at OLCF.
    comms/index
    perf/index
    linalg/index
+   taskpar/index
    apps/index
 
    references

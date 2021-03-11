@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>7.2. Running Vasp 6 on OLCF &mdash; OLCF Cookbook  documentation</title>
+  <title>Running Quantum Espresso on Summit &mdash; OLCF Cookbook  documentation</title>
   
 
   
@@ -39,8 +39,6 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="8. Resources" href="../references.html" />
-    <link rel="prev" title="7.1. Running CP2K on Summit" href="CP2K.html" />
 
 </head>
 
@@ -86,7 +84,7 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../dev/index.html">1. Development Tools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../dev/workflow.html">1.1. Setting Up Your Project Environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dev/make.html">1.2. Useful Shortcuts for Makefiles</a></li>
@@ -116,15 +114,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../linalg/slate.html">5.1. SLATE Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../taskpar/index.html">6. Task-Parallel Runtime Scheduling</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">7. Applications</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="CP2K.html">7.1. Running CP2K on Summit</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">7.2. Running Vasp 6 on OLCF</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">6. Applications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="CP2K.html">6.1. Running CP2K on Summit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="VASP6.html">6.2. Running Vasp 6 on OLCF</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html">8. Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">9. Libraries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">10. Benchmark Code Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html">7. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#libraries">8. Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../references.html#benchmark-code-examples">9. Benchmark Code Examples</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../contributing/index.html">How to contribute to this book</a><ul>
@@ -179,15 +176,13 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-          <li><a href="index.html"><span class="section-number">7. </span>Applications</a> &raquo;</li>
-        
-      <li><span class="section-number">7.2. </span>Running Vasp 6 on OLCF</li>
+      <li>Running Quantum Espresso on Summit</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/apps/VASP6.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/apps/QE.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -200,17 +195,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="running-vasp-6-on-olcf">
-<h1><span class="section-number">7.2. </span>Running Vasp 6 on OLCF<a class="headerlink" href="#running-vasp-6-on-olcf" title="Permalink to this headline">¶</a></h1>
-<p>To access vasp, you must first obtain a license from the authors
-and process it through <a class="reference external" href="mailto:help&#37;&#52;&#48;olcf&#46;ornl&#46;gov" target="_blank">help<span>&#64;</span>olcf<span>&#46;</span>ornl<span>&#46;</span>gov</a>.</p>
-<p>The vasp codes are located at <cite>/sw/summit/vasp/6.1.0/bin</cite>,
-and contain:</p>
-<ul class="simple">
-<li><cite>vasp_std</cite> - Standard vasp.</li>
-<li><cite>vasp_ncl</cite> - Standard vasp compiled a different way.</li>
-<li><cite>vasp_gam</cite> - Specialized code for running at the gamma-point (i.e. no k-point replicas)</li>
-</ul>
+  <div class="section" id="running-quantum-espresso-on-summit">
+<h1>Running Quantum Espresso on Summit<a class="headerlink" href="#running-quantum-espresso-on-summit" title="Permalink to this headline">¶</a></h1>
+<p>An initial GPU-accelerated version of Quantum Espresso was developed by
+Massimiliano Fatica, Everett Phillips, Josh Romero, and Filippo Spiga around 2018.
+here (<a class="reference external" href="https://github.com/fspiga/qe-gpu" target="_blank">https://github.com/fspiga/qe-gpu</a>).
+This is the presentation: <a class="reference external" href="http://indico.ictp.it/event/8004/session/107/contribution/220/material/slides/0.pdf" target="_blank">http://indico.ictp.it/event/8004/session/107/contribution/220/material/slides/0.pdf</a></p>
+<p>Recently, the main QE development effort has also released a Quantum Espresso
+here (<a class="reference external" href="https://gitlab.com/QEF/q-e-gpu" target="_blank">https://gitlab.com/QEF/q-e-gpu</a>).</p>
+<div class="section" id="installing-cp2k">
+<h2>Installing CP2K<a class="headerlink" href="#installing-cp2k" title="Permalink to this headline">¶</a></h2>
+<p>Here’s the process of querying system information and installing
+cp2k - a quantum chemistry package with lots of dependencies.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -218,15 +218,6 @@ and contain:</p>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="../references.html" class="btn btn-neutral float-right" title="8. Resources" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="CP2K.html" class="btn btn-neutral float-left" title="7.1. Running CP2K on Summit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
-    </div>
   
 
   <hr/>

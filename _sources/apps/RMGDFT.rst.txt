@@ -1,0 +1,37 @@
+RMGDFT
+######
+
+The real-space multigrid DFT code is an Open Source electronic structure calculator
+for modeling of materials and molecules.
+It is based on density functional theory and uses a real space basis and pseudopotentials.
+
+https://github.com/RMGDFT/rmgdft
+
+Installing
+==========
+
+RMGDFT uses a cmake installation, so only requires a standard procedure,
+
+.. code-block:: shell
+
+    export PROJHOME=/ccs/proj/<your project ID>
+    module load gcc/8 cuda spectrum-mpi essl cmake
+
+    cd $PROJHOME
+    mkdir opt
+    git clone https://github.com/RMGDFT/rmgdft
+    cd rmgdft
+    mkdir build
+    cmake -DCMAKE_C_COMPILER=`which mpicc` \
+      -DCMAKE_CXX_COMPILER=`which mpicxx` \
+      -DCMAKE_PREFIX_PATH="$BOOST_ROOT;$FFTW_ROOT;$HDF5_ROOT;$BLAS_ROOT" \
+      -DBLA_VENDOR="OpenBLAS" \
+      -DCMAKE_INSTALL_PREFIX="$PROJHOME/opt" \
+      -DHDF5_ROOT="$HDF5_ROOT" \
+      -DRMG_CUDA_ENABLED=True \
+      ..
+
+    make -j4
+    make install
+
+

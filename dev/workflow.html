@@ -206,28 +206,46 @@ sources to <code class="docutils literal notranslate"><span class="pre">/ccs/pro
 <code class="docutils literal notranslate"><span class="pre">/gpfs/alpine/proj-shared/CHM101</span></code>,
 and use <code class="docutils literal notranslate"><span class="pre">/gpfs/alpine/scratch/$USER/CHM101</span></code>
 during a run.</p>
-<p>You should also strongly consider
-having each MPI rank do all file-per-process I/O
-to <code class="docutils literal notranslate"><span class="pre">/mnt/bb/$USER</span></code>, as described in
-<a class="reference external" href="https://docs.olcf.ornl.gov/systems/summit_user_guide.html#current-nvme-usage" target="_blank">Using the NVME</a>.</p>
+<p>A good project layout will usually look like:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>/ccs/proj/CHM101
+    /spack         -- <span class="nb">local</span> spack installation <span class="k">for</span> dependencies
+    /cp2k-June2021 -- project<span class="s1">&#39;s main application code</span>
+<span class="s1">    /user1</span>
+<span class="s1">       /python     -- local python environment</span>
+<span class="s1">       /analysis1  -- user1&#39;</span>s scripts <span class="k">for</span> analysis
+    README.md      -- explanation of your project layout, file locations and storage/transfer policy
+
+/gpfs/alpine/proj-shared/CHM101
+    /user1
+        /experiment1 -- config files, lsf <span class="o">(</span>batch script<span class="o">)</span>, and key outputs
+    /user2
+
+/gpfs/alpine/world-shared/CHM101
+    /user1
+        /shared-dataset
+
+/gpfs/alpine/scratch/user1/CHM101
+    /experiment1 -- runtime scratch space <span class="k">for</span> experiment1
+</pre></div>
+</div>
 <div class="section" id="installing-software">
 <h2><span class="section-number">1.1.1. </span>Installing Software<a class="headerlink" href="#installing-software" title="Permalink to this headline">¶</a></h2>
-<p>Here’s the process of querying system information and installing
-cp2k - a quantum chemistry package with lots of dependencies.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /ccs/proj/CHM101
-git clone --depth <span class="m">1</span> --recurse-submodules https://github.com/cp2k/cp2k.git cp2k
+<p>The first step is, of course, to download and install your application
+codes and libraries.  For optimal performance, you’ll want to do these
+steps yourself or have a way to check that they are performing correctly.</p>
+<p>For example, the <span class="xref std std-doc">apps/CP2K</span> program depends largely
+on GPU-enabled libraries for using the GPUs.</p>
+<p>It’s important to check the available modules for available system-specific,
+optimized dependencies.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module spider mpi
 </pre></div>
 </div>
-<p>Going through the dependency list in the INSTALL instructions, <cite>make</cite> is there, but
-<cite>python</cite>-3 comes from a module.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>module avail python
-</pre></div>
-</div>
-<p>It’s good practice to collect these into a standard environment.
-We’ll end up with the following,</p>
+<p>It’s good practice to document your module environment
+by creating a setup script.  Here’s an example
+from cp2k.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
-<span class="c1"># /ccs/proj/CHM101/cp2k-env.sh</span>
-<span class="c1"># to use this, run &quot;source /ccs/proj/CHM101/cp2k-env.sh&quot;</span>
+<span class="c1"># /ccs/proj/CHM101/cp2k-June2021/env.sh</span>
+<span class="c1"># to use this, run &quot;source /ccs/proj/CHM101/cp2k-June2021/env.sh&quot;</span>
 
 module load cmake
 module load gcc
@@ -242,145 +260,49 @@ module load fftw/3
 module load gsl
 </pre></div>
 </div>
-<p>CP2K provides a toolchain to compiler its other dependencies,</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>cd cp2k/tools/toolchain
-./install_cp2k_toolchain.sh --help
-
--j &lt;n&gt;                    Number of processors to use
-
-             On Summit, you can compile on the head node,
-             but stick to less than 4 or 8 processors
-             to be kind to other users.
-
---mpi-mode=openmpi
-
-             Summit is an IBM system, and uses spectrum-mpi
-             as provided by a module.  It is based on openmpi 4.0.1,
-             and supports the MPI 3.2 standard.
-             (https://www.ibm.com/support/knowledgecenter/SSZTET_10.3/smpi_overview.html).
-             Spectrum updates are deployed every 6 months or so.
-             Upgrades and downtimes are announced weeks in advanced,
-             and put on the facility calendar.
-             Old modules become deprecated (but still available).
-             Keep track of your build process, because you will probably
-             want to re-build on these updates.
-
---math-mode=openblas
-
-             IBM has ESSL as a BLAS library, but it doesn&#39;t include
-             all the lapack functions.  We also provide a netlib-scalapack
-             library that includes lapack/blas, as well as a separate openblas
-             library.
-
---enable-cuda=yes         You should definitely use GPUs when on Summit.
---gpu-ver=V100
-
-             Summit&#39;s hardware is documented at
-             https://docs.olcf.ornl.gov/systems/summit_user_guide.html#system-overview
-             The V100 GPUs have compute capability 70, so the usual flag
-             passed to nvcc is --gpu_arch=sm_70.
-
---enable-cray=no          Summit&#39;s vendor is IBM, not Cray.
-
-             Package choices, below, are mostly informed by available
-             modules and/or the difficulty of building those libraries
-             manually.  Work incrementally if possible.
-
-             Usually, you can get important public, core libraries turned
-             into modules by emailing the help desk at help@olcf.ornl.gov.
-             But be sure you have tried them first and it&#39;s what you really want
-             (so you have a complete request to email).
-
---with-gcc=system         Provided by gcc module
-
---with-cmake=system       Provided by cmake module
-
---with-openmpi=system     Provided by spectrum-mpi module
-
---with-fftw=system        Provided by the fftw/3 module
-
---with-reflapack=no
---with-acml=no
---with-mkl=no
---with-cosma=no           Replaces scalapack, we&#39;ll try keeping scalapack first.
-
---with-openblas=system    Provided by the openblas module (CPU only).
---with-scalapack=system   Provided by the netlib-scalapack module (CPU only).
-
---with-elpa=no            ELPA works using GPU on Summit, but this
-                          automated build isn&#39;t working. [I tried]
-
---with-ptscotch=no        No module is available, can revisit if PEXSI is needed.
---with-superlu=no         not using PEXSI right away.
---with-pexsi=no
-
---with-gsl=system         provided by the gsl module
---with-hdf5=system        provided by hdf5 module
-
-             Ask the tool to install all of the following chemistry-specific
-             libraries locally:
-
---with-libxc=install      The tool will install.
---with-libint=install
---with-spglib=install
---with-sirius=no          Trial and error - not currently building.
---with-spfft=install
---with-libvdwxc=install
---with-libsmm=install
---with-libxsmm=no         x86_x64 is different than IBM&#39;s PPC (ppc64le)
---with-libvori=no
-</pre></div>
-</div>
-<p>To use maximum available parallelism, I compiled using an interactive
-session on a node,</p>
+<div class="section" id="useful-info">
+<h3><span class="section-number">1.1.1.1. </span>Useful Info<a class="headerlink" href="#useful-info" title="Permalink to this headline">¶</a></h3>
+<p>On Summit, you should compile on the login nodes,
+but stick to less than 4 or 8 processors
+to be kind to other users.</p>
+<p>Summit is an IBM system, and uses spectrum-mpi
+as provided by a module.  It is based on openmpi 4.0.1,
+and supports the MPI 3.2 standard.
+(<a class="reference external" href="https://www.ibm.com/support/knowledgecenter/SSZTET_10.3/smpi_overview.html" target="_blank">https://www.ibm.com/support/knowledgecenter/SSZTET_10.3/smpi_overview.html</a>).
+Spectrum updates are deployed every 6 months or so.
+Upgrades and downtimes are announced weeks in advanced,
+and put on the facility calendar.
+Old modules become deprecated (but still available).
+Keep track of your build process, because you will probably
+want to re-build on these updates.</p>
+<p>IBM has ESSL as a BLAS library, but it doesn’t include
+all the lapack functions.  We also provide a netlib-scalapack
+library that includes lapack/blas, as well as a separate openblas
+library.</p>
+<p>Summit’s hardware is documented at
+<a class="reference external" href="https://docs.olcf.ornl.gov/systems/summit_user_guide.html#system-overview" target="_blank">https://docs.olcf.ornl.gov/systems/summit_user_guide.html#system-overview</a>
+The V100 GPUs have compute capability 70, so the usual flag
+passed to nvcc is –gpu_arch=sm_70.</p>
+<p>Compilation and package choices should be informed by available
+modules and/or the difficulty of building those libraries
+manually.  Work incrementally if possible.</p>
+<p>Usually, you can get important public, core libraries turned
+into modules by emailing the help desk at <a class="reference external" href="mailto:help&#37;&#52;&#48;olcf&#46;ornl&#46;gov" target="_blank">help<span>&#64;</span>olcf<span>&#46;</span>ornl<span>&#46;</span>gov</a>.
+But be sure you have tried them first and it’s what you really want
+(so you have a complete request to email).</p>
+<p>To test out your environment and develop LSF batch scripts
+for running jobs, you can run interactively.</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>bsub -P CHM101 -nnodes <span class="m">1</span> -q debug -W <span class="m">30</span> -Is <span class="nv">$SHELL</span>
 </pre></div>
 </div>
-<p>After running <cite>install_cp2k_toolchain.sh</cite> with the options above,
-it provides further instructions.  The compile fails (with
-a bash syntax error) at some point because of
-a missing environment variable, but
-it’s easy to fix the <cite>scripts/stage1/install_openmpi.sh</cite>
-so that the mpi3 path is taken.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>Now copy:
- cp /ccs/proj/CHM101/cp2k/tools/toolchain/install/arch/* to the cp2k/arch/ directory
-To use the installed tools and libraries and cp2k version
-compiled with it you will first need to execute at the prompt:
-  <span class="nb">source</span> /ccs/proj/CHM101/cp2k/tools/toolchain/install/setup
-To build CP2K you should change directory:
-  <span class="nb">cd</span> cp2k/
-  make -j <span class="m">128</span> <span class="nv">ARCH</span><span class="o">=</span><span class="nb">local</span> <span class="nv">VERSION</span><span class="o">=</span><span class="s2">&quot;ssmp sdbg psmp pdbg&quot;</span>
-
-arch files <span class="k">for</span> GPU enabled CUDA versions are named <span class="s2">&quot;local_cuda.*&quot;</span>
-arch files <span class="k">for</span> valgrind versions are named <span class="s2">&quot;local_valgrind.*&quot;</span>
-arch files <span class="k">for</span> coverage versions are named <span class="s2">&quot;local_coverage.*&quot;</span>
-</pre></div>
+<p>Note that your interactive jobs are running on a launch node,
+which is shared with other users.  You should limit yourself
+to one processor on the launch nodes, and use jsrun to</p>
+<p>Don’t compile on the launch nodes.  If you must, use jsrun
+(equivalent of mpirun) to run make on a summit node instead.</p>
+<p>When creating job scripts, it’s a good idea to test your
+launch configuration using <a class="reference external" href="https://jobstepviewer.olcf.ornl.gov/" target="_blank">https://jobstepviewer.olcf.ornl.gov/</a>.</p>
 </div>
-<p>I added the extra <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">...</span></code> line to <code class="docutils literal notranslate"><span class="pre">/ccs/proj/CHM101/cp2k-env.sh</span></code>,
-and then compiled.
-Apparently, the fortran sanitizer is not available on our system (at least with gcc 6.4.0).
-CP2K makes it easy to fiddle with compile flags by editing the <code class="docutils literal notranslate"><span class="pre">arch/local*</span></code> files though,
-so you can manually remove <code class="docutils literal notranslate"><span class="pre">-fsanitize=leak</span></code> from the <code class="docutils literal notranslate"><span class="pre">arch/local*</span></code> files.</p>
-<p>That’s not necessary in this case, since the main executable you want to build is:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>make -j <span class="m">4</span> <span class="nv">ARCH</span><span class="o">=</span>local_cuda <span class="nv">VERSION</span><span class="o">=</span>psmp
-</pre></div>
-</div>
-<p>You can check that this binary “should” be GPU-enabled by running <code class="docutils literal notranslate"><span class="pre">ldd</span> <span class="pre">exe/local_cuda/cp2k.psmp</span></code>.
-This shows several NVIDIA libraries, so at least we know some function calls to those libraries
-exist.  You should always check your code’s performance and correctness to be sure.</p>
-</div>
-<div class="section" id="todo">
-<h2><span class="section-number">1.1.2. </span>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
-<p>Complete this example with:</p>
-<blockquote>
-<div><ul class="simple">
-<li>an lsf script, explain what the launch node is</li>
-<li>I/O paths (write to /gpfs), expected IO throughput
-~ 10 Mb/s in file-per-process mode, expect latency</li>
-<li>saving software version and parameters in output</li>
-<li>collecting profiling / timing data</li>
-</ul>
-</div></blockquote>
 </div>
 </div>
 

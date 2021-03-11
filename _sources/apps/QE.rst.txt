@@ -1,0 +1,19 @@
+Running Quantum Espresso on Summit
+##################################
+
+An initial GPU-accelerated version of Quantum Espresso was developed by 
+Massimiliano Fatica, Everett Phillips, Josh Romero, and Filippo Spiga around 2018.
+here (https://github.com/fspiga/qe-gpu).
+This is the presentation: http://indico.ictp.it/event/8004/session/107/contribution/220/material/slides/0.pdf
+
+Recently, the main QE development effort has also released a Quantum Espresso
+here (https://gitlab.com/QEF/q-e-gpu).
+
+Installing CP2K
+===============
+
+Here's the process of querying system information and installing
+cp2k - a quantum chemistry package with lots of dependencies.
+
+.. code-block:: shell
+
