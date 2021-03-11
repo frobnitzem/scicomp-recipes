@@ -24,46 +24,71 @@ cool per-thread trace plots in
     // mini-openmp compatibility layer
     #include <mpi.h>
     inline double omp_get_wtime() {
-        return MPI_Wtime();
+	return MPI_Wtime();
     }
     inline int omp_get_max_threads() {
-        return 1;
+	return 1;
     }
     inline int omp_get_num_threads(void) {
-        return 1;
+	return 1;
     }
     inline int omp_get_thread_num(void) {
-        return 0;
+	return 0;
     }
     #endif
 
     namespace Performance {
     struct PerfData {
-        double t0, t1;
-        double bytes, flops;
-        PerfData(double _t0, uint64_t _bytes, uint64_t _flops)
-            : t0(_t0), bytes(_bytes), flops(_flops) {}
+	double t0, t1;
+	double bytes, flops;
+	PerfData(double _t0, uint64_t _bytes, uint64_t _flops)
+	    : t0(_t0), bytes(_bytes), flops(_flops) {}
+    };
+
+    struct PerfAvg {
+	/** Accumulates:
+	 *
+	 *   min = min_i x_i
+	 *   max = max_i x_i
+	 *   s = \sum_i x_i
+	 *   v = \sum_i (x_i - s/n)^2
+	 *   n = \sum_i 1
+	 */
+	PerfAvg(double x) : min(x), max(x), s(x), v(0.0), n(1) { }
+	void add(const double x) {
+	    // Old Trick From: https://manual.gromacs.org/2020/reference-manual/averages.html
+	    if(x < min) min = x;
+	    if(x > max) max = x;
+	    v += (s - n*x)*(s - n*x) / (n*(n+1.0));
+	    s += x;
+	    n += 1;
+	}
+	double min, max, s, v;
+	int n;
     };
 
     struct Timers {
-        static void append(const std::string &label, PerfData &&datum);
-        static void show(std::ostream &os);
-        static void on();
-        static void off();
+        /**
+         *  This class is declared (global) inside the perf.cc and must exist only there.
+         */
+	static void append(const std::string &label, PerfData &&datum);
+	static void show(std::ostream &os);
+	static void on();
+	static void off();
     };
 
     class Timed {
-        public:
-            Timed(const std::string &_label, uint64_t bytes, uint64_t flops)
-                : label(_label), datum(omp_get_wtime(),
-                                        bytes, flops) {}
-            ~Timed() {
-                datum.t1 = omp_get_wtime();
-                Timers::append(label, std::move(datum));
-            }
-        private:
-            const std::string label;
-            PerfData datum;
+	public:
+	    Timed(const std::string &_label, uint64_t bytes, uint64_t flops)
+		: label(_label), datum(omp_get_wtime(),
+					bytes, flops) {}
+	    ~Timed() {
+		datum.t1 = omp_get_wtime();
+		Timers::append(label, std::move(datum));
+	    }
+	private:
+	    const std::string label;
+	    PerfData datum;
     };
     }
     #endif
@@ -83,34 +108,39 @@ will be on the order of microseconds.
     // perf.cc
     #include "perf.hh"
     #include <vector>
+    #include <tuple>
     #include <map>
+    #include <cmath>
 
     namespace Performance {
+        using d2 = std::tuple<double,double>;
+
         static bool tracing = false;
         static int num_threads = omp_get_max_threads();
-        static std::vector<std::map<std::string,std::vector<PerfData>>> events(num_threads);
+        static std::vector<std::map<std::string,std::map<d2,PerfAvg>>> events(num_threads);
 
         void Timers::append(const std::string &label, PerfData &&datum) {
             if(!tracing) return;
             auto &self = events[omp_get_thread_num()];
             auto it = self.find(label);
+            d2 key(datum.bytes, datum.flops);
             if (it == self.end()) {
-                auto v = std::vector<PerfData>();
-                v.emplace_back(datum);
+                auto v = std::map<d2,PerfAvg>();
+                v.emplace(key, PerfAvg(datum.t1-datum.t0));
                 self[label] = v;
             } else {
-                it->second.emplace_back(datum);
+                auto &et = it->second;
+                auto ev = et.find(key);
+                if (ev == et.end()) {
+                    et.emplace(key, PerfAvg(datum.t1-datum.t0));
+                } else {
+                    ev->second.add(datum.t1-datum.t0);
+                }
             }
         }
         void Timers::on() { tracing = true; }
         void Timers::off() { tracing = false; }
 
-        static std::ostream& operator<<(std::ostream& os, const PerfData& x) {
-            return os << "      { 'Start': " << x.t0 << std::endl
-                      << "      , 'Duration': " << x.t1-x.t0 << std::endl
-                      << "      , 'Bytes': " << x.bytes << std::endl
-                      << "      , 'Flops': " << x.flops << " }" << std::endl;
-        }
         void Timers::show(std::ostream &os) {
             const char hdr1[] = "[ ";
             const char hdr2[] = ", ";
@@ -124,18 +154,27 @@ will be on the order of microseconds.
 
                 const char *bhdr = hdr3;
                 for(auto et : self) { // all events for thread
-                    os << bhdr << "'" << et.first << "' : [" << std::endl;
+                    os << bhdr << "\"" << et.first << "\" : [";
                     bhdr = hdr4;
-
-                    for(auto ev : et.second) {
-                        os << ev;
-                        os << "," << std::endl;
+                    int i = 0;
+                    for(auto ev : et.second) { // all map values
+                       auto x = ev.second;
+                       if(i != 0)
+                           os << ",";
+                       i = 1;
+                       os << "\n      { \"Bytes\": " << std::get<0>(ev.first) << std::endl
+                          << "      , \"Flops\": " << std::get<1>(ev.first) << std::endl
+                          << "      , \"Calls\": " << x.n << std::endl
+                          << "      , \"Min\": "   << x.min << std::endl
+                          << "      , \"Max\": "   << x.max << std::endl
+                          << "      , \"Avg\": "   << x.s/x.n << std::endl
+                          << "      , \"Stddev\": " << std::sqrt(x.v/x.n) << " }";
                     }
-                    os << "      ]" << std::endl;
+                    os << "\n      ]\n";
                 }
-                os << "  }" << std::endl;
+                os << "  }\n";
             }
-            os << "]" << std::endl;
+            os << "]\n";
         }
     }
 
